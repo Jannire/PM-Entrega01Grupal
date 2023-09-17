@@ -50,7 +50,7 @@ fun TextFieldWithLeadingIcon(
             },
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.White,
+                backgroundColor = (if (isSystemInDarkTheme()) Color.DarkGray else White400),
                 focusedIndicatorColor = Color.LightGray,
                 unfocusedIndicatorColor = Orange800
             ),
@@ -59,7 +59,7 @@ fun TextFieldWithLeadingIcon(
                 Icon(
                     imageVector = leadingIcon,
                     contentDescription = null,
-                    tint = (if (isSystemInDarkTheme()) White400 else Orange400),
+                    tint = (if (isSystemInDarkTheme()) White400 else Color.Black),
                     modifier = Modifier
                         .padding(4.dp)
                         .size(24.dp)

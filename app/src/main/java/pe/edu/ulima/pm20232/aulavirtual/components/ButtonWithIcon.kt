@@ -1,5 +1,6 @@
 package pe.edu.ulima.pm20232.aulavirtual.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
+import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 
 @Composable
 fun ButtonWithIcon(
@@ -33,13 +35,15 @@ fun ButtonWithIcon(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            /*
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(32.dp)
             )
+            */
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text)
+            Text(text = text, color = (if (isSystemInDarkTheme()) White400 else Color.Black))
         }
     }
 }
