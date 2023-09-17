@@ -44,12 +44,12 @@ fun TopScreen(){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Orange400)
+                .background(Gray1200)
                 .weight(3f)
                 .padding(8.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            val paddingPercentage = 80;
+            val paddingPercentage = 60;
             val paddingValue = with(LocalDensity.current) {
                 (paddingPercentage * 0.02f * 16.dp.toPx()).dp
             }
@@ -62,22 +62,19 @@ fun TopScreen(){
                     painter = painterResource(id = R.drawable.ic_ulima), // Replace with your SVG resource ID
                     contentDescription = "Universidad de Lima",
                     modifier = Modifier.size(120.dp),
-                    colorFilter = ColorFilter.tint(White400),
+                    colorFilter = ColorFilter.tint(Orange400),
                 )
-                Text1(
-                    text = "Gimnasio UL",
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    //fontSize = 40.sp,
-                    modifier =  Modifier.padding(top = 20.dp, bottom = 20.dp),
-                        style = MaterialTheme.typography.h4.copy(
-                        fontSize = 40.sp,
-                        fontFamily = FontFamily(Font(R.font.caslon_classico_sc_regular)),
-                        color = if (isSystemInDarkTheme()) White400 else Orange400 // Apply the custom text color here
-                    )
-                )
+                // Título de la pantalla "Gimnasio Ulima".
+                Text1(text ="Gimnasio ULima", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(top = 12.dp))
             }
         }
+        // Este box es creado para definir el background del componente. La proporción de las cajas es de 3 (Gris) y 4 (Blanco) con respecto a toda la pantalla.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(4f)
+                .background(White400)
+        )
     }
 }
 
@@ -95,8 +92,7 @@ fun LoginForm(
     Box( // caja gris (light)
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = (screenHeightDp * 0.30).dp,)
-            .background(Gray1200),
+            .padding(top = (screenHeightDp * 0.30).dp)
     ) {
         Box(modifier = Modifier.padding(
             start = (screenWidthDp * 0.125).dp,
@@ -110,18 +106,14 @@ fun LoginForm(
                     ) // Adjust the size as needed
                     //.border(1.dp, Gray800)
                     .background(White400)
-                    .shadow(
-                        elevation = 5.dp,
-                        shape = MaterialTheme.shapes.medium,
-                        //color = Color.Gray
-                    )
+                    .border(.5.dp, Gray400) // Se cambio el borde del Login Form según la interface.
                     .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp),
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
-                    Text1(text ="Bienvenido al Sistema", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text1(text ="INGRESA TU INFORMACIÓN", fontWeight = FontWeight.Normal, fontSize = 12.sp)
                     TextFieldWithLeadingIcon(
                         leadingIcon = Icons.Default.Person, // Replace with your desired icon
                         placeholder = "Usuario",
@@ -145,10 +137,11 @@ fun LoginForm(
                             .padding(top = 25.dp),
                         horizontalArrangement = Arrangement.Center,
                     ){
-                        ButtonWithIcon("INGRESAR", Icons.Default.Person, {
+                        ButtonWithIcon("LOGIN", Icons.Default.Person, {
                             viewModel.access()
                         })
                     }
+                    /*
                     CheckboxWithLabel(
                         label = "Términos y Condiciones",
                         isChecked = viewModel.termsAndConditionsChecked,
@@ -171,6 +164,7 @@ fun LoginForm(
                         },
                         disabled = termsDisabled,
                     )
+                    */
                 }
             }
         }
@@ -261,12 +255,12 @@ fun GoToReset(){
         contentAlignment = Alignment.BottomCenter
     ){
         Row() {
-            Text1(text = "Olvidó su contraseña? ", textAlign = TextAlign.End, color = Gray800, fontSize = 16.sp)
+            Text1(text = "Olvidaste tu contraseña? ", textAlign = TextAlign.End, color = Gray800, fontSize = 14.sp)
             Text1(
-                text = "Cambiala Aquí",
+                text = "Recupérala aquí",
                 textAlign = TextAlign.End,
                 color = Orange400,
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
                     println("Cambiar Contraseña")
