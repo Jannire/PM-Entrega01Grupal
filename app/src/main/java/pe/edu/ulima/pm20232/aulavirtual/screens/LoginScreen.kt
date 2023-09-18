@@ -44,7 +44,7 @@ fun TopScreen(){
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Gray1200)
+                .background(if (isSystemInDarkTheme()) Color.Black else Gray1200)
                 .weight(3f)
                 .padding(8.dp),
             contentAlignment = Alignment.TopCenter
@@ -73,7 +73,7 @@ fun TopScreen(){
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(4f)
-                .background(White400)
+                .background(if (isSystemInDarkTheme()) Color.DarkGray else White400)
         )
     }
 }
@@ -105,7 +105,7 @@ fun LoginForm(
                         (screenHeightDp * 0.45).dp
                     ) // Adjust the size as needed
                     //.border(1.dp, Gray800)
-                    .background(White400)
+                    .background((if (isSystemInDarkTheme()) Color.DarkGray else White400))
                     .border(.5.dp, Gray400) // Se cambio el borde del Login Form según la interface.
                     .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp),
             ) {
@@ -113,8 +113,9 @@ fun LoginForm(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
-                    Text1(text ="INGRESA TU INFORMACIÓN", fontWeight = FontWeight.Normal, fontSize = 12.sp)
+                    Text1(text ="INGRESA ESTA INFORMACIÓN", fontWeight = FontWeight.Normal, fontSize = 13.sp)
                     TextFieldWithLeadingIcon(
+
                         leadingIcon = Icons.Default.Person, // Replace with your desired icon
                         placeholder = "Usuario",
                         text = viewModel.user,
@@ -141,30 +142,6 @@ fun LoginForm(
                             viewModel.access()
                         })
                     }
-                    /*
-                    CheckboxWithLabel(
-                        label = "Términos y Condiciones",
-                        isChecked = viewModel.termsAndConditionsChecked,
-                        onCheckedChange = {
-                            viewModel.termsAndConditionsChecked = it
-                        },
-                        onClick = {
-                            if(!termsDisabled){
-                                viewModel.termsAndConditionsChecked = !viewModel.termsAndConditionsChecked
-                            }
-                            coroutineScope.launch {
-                                if (bottomSheetScaffoldState.bottomSheetState.isCollapsed){
-                                    viewModel.bottomSheetCollapse = false
-                                    bottomSheetScaffoldState.bottomSheetState.expand()
-                                }else{
-                                    viewModel.bottomSheetCollapse = true
-                                    bottomSheetScaffoldState.bottomSheetState.collapse()
-                                }
-                            }
-                        },
-                        disabled = termsDisabled,
-                    )
-                    */
                 }
             }
         }
@@ -255,7 +232,7 @@ fun GoToReset(){
         contentAlignment = Alignment.BottomCenter
     ){
         Row() {
-            Text1(text = "Olvidaste tu contraseña? ", textAlign = TextAlign.End, color = Gray800, fontSize = 14.sp)
+            Text1(text = "Olvidaste tu contraseña? ", textAlign = TextAlign.End, color = (if (isSystemInDarkTheme()) White400 else Gray800), fontSize = 14.sp)
             Text1(
                 text = "Recupérala aquí",
                 textAlign = TextAlign.End,
