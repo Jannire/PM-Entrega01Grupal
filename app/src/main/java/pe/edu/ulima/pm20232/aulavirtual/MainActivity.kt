@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
+import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ResetPasswordViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screens.LoginScreen
 import pe.edu.ulima.pm20232.aulavirtual.screens.ProfileScreen
 import pe.edu.ulima.pm20232.aulavirtual.screens.ResetPasswordScreen
@@ -24,6 +25,7 @@ import pe.edu.ulima.pm20232.aulavirtual.ui.theme.AulaVirtualTheme
 
 class MainActivity : ComponentActivity() {
     private val loginScrennViewModel by viewModels<LoginScreenViewModel>()
+    private val resetPasswordViewModel by viewModels<ResetPasswordViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +46,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("main") {
                             // Replace with your main screen Composable
-                            LoginScreen(loginScrennViewModel, navController)
+                            // LoginScreen(loginScrennViewModel, navController)
                             // ProfileScreen()
-                            // ResetPasswordScreen()
+                            ResetPasswordScreen(resetPasswordViewModel, navController)
                         }
                     }
                 }
