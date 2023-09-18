@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("main") {
                             // Replace with your main screen Composable
-                            LoginScreen(loginScrennViewModel, navController)
-                            // ProfileScreen()
+                            // LoginScreen(loginScrennViewModel, navController)
+                            ProfileScreen()
                             // ResetPasswordScreen()
                         }
                     }
