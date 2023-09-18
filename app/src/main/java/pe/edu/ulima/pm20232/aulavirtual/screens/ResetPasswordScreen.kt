@@ -2,6 +2,7 @@ package pe.edu.ulima.pm20232.aulavirtual.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -61,6 +62,7 @@ import pe.edu.ulima.pm20232.aulavirtual.components.CheckboxWithLabel
 import pe.edu.ulima.pm20232.aulavirtual.components.TextFieldWithLeadingIcon
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ResetPasswordViewModel
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray1200
+import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
@@ -99,7 +101,7 @@ fun TScreen(){
       Box(
          modifier = Modifier
             .fillMaxWidth()
-            .background(Orange400)
+            .background(if (isSystemInDarkTheme()) Color.Black else Gray1200)
             .weight(3f)
             .padding(8.dp),
          contentAlignment = Alignment.TopCenter
@@ -119,20 +121,16 @@ fun TScreen(){
                modifier = Modifier.size(120.dp),
                colorFilter = ColorFilter.tint(White400),
             )
-            Text(
-               text = "Gimnasio UL",
-               textAlign = TextAlign.Center,
-               color = Color.White,
-               //fontSize = 40.sp,
-               modifier =  Modifier.padding(top = 20.dp, bottom = 20.dp),
-               style = MaterialTheme.typography.h4.copy(
-                  fontSize = 40.sp,
-                  fontFamily = FontFamily(Font(R.font.caslon_classico_sc_regular)),
-                  color = (if (isSystemInDarkTheme()) White400 else Orange400) // Apply the custom text color here
-               )
-            )
+            // Título de la pantalla "Gimnasio Ulima".
+            Text(text ="Gimnasio ULima", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(top = 12.dp))
          }
       }
+      Box(
+         modifier = Modifier
+            .fillMaxWidth()
+            .weight(4f)
+            .background(if (isSystemInDarkTheme()) Color.DarkGray else White400)
+      )
    }
 }
 
@@ -149,8 +147,7 @@ fun ResetPassForm(
    Box( // caja gris (light)
       modifier = Modifier
          .fillMaxSize()
-         .padding(top = (screenHeightDp * 0.30).dp,)
-         .background(Gray1200),
+         .padding(top = (screenHeightDp * 0.30).dp)
    ) {
       Box(modifier = Modifier.padding(
          start = (screenWidthDp * 0.125).dp,
@@ -163,19 +160,15 @@ fun ResetPassForm(
                   (screenHeightDp * 0.45).dp
                ) // Adjust the size as needed
                //.border(1.dp, Gray800)
-               .background((if (isSystemInDarkTheme()) Color.LightGray else White400))
-               .shadow(
-                  elevation = 5.dp,
-                  shape = MaterialTheme.shapes.medium,
-                  //color = Color.Gray
-               )
-               .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp),
+               .background((if (isSystemInDarkTheme()) Color.DarkGray else White400))
+               .border(1.dp, Gray400) // Se cambio el borde del Login Form según la interface.
+               .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp)
          ) {
             Column(
                verticalArrangement = Arrangement.Center,
                horizontalAlignment = Alignment.CenterHorizontally
             ){
-               Text(text ="SOLICITE CAMBIO DE CONTRASEÑA", fontWeight = FontWeight.Bold, fontSize = 12.sp, color = (if (isSystemInDarkTheme()) Color.DarkGray else White400))
+               Text(text ="SOLICITE CAMBIO DE CONTRASEÑA", fontWeight = FontWeight.Medium, fontSize = 13.sp)
                TextFieldWithLeadingIcon(
                   leadingIcon = Icons.Default.AccountBox, // Replace with your desired icon
                   placeholder = "DNI",

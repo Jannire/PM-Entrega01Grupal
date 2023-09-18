@@ -107,13 +107,13 @@ fun LoginForm(
                     //.border(1.dp, Gray800)
                     .background((if (isSystemInDarkTheme()) Color.DarkGray else White400))
                     .border(.5.dp, Gray400) // Se cambio el borde del Login Form según la interface.
-                    .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp),
+                    .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
-                    Text1(text ="INGRESA ESTA INFORMACIÓN", fontWeight = FontWeight.Normal, fontSize = 13.sp)
+                    Text1(text ="INGRESA ESTA INFORMACIÓN", fontWeight = FontWeight.Medium, fontSize = 13.sp)
                     TextFieldWithLeadingIcon(
 
                         leadingIcon = Icons.Default.Person, // Replace with your desired icon

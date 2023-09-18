@@ -46,7 +46,7 @@ fun TextFieldWithLeadingIcon(
                 onTextChanged(it)
             },
             placeholder = {
-                Text(text = placeholder, fontSize = 16.sp)
+                Text(text = placeholder, fontSize = 14.sp)
             },
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
