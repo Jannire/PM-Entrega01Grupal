@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,7 +48,7 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .height((screenHeightDp * 0.08).dp)
-            .background(White400),
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -76,7 +77,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height((screenHeightDp * 0.20).dp) // SCREEN: 20%
-            .background(White800)
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
             .padding(start = (screenWidthDp * 0.1).dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -99,10 +100,10 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
                 modifier = Modifier.padding(bottom = (screenHeightDp * 0.01).dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_persona), // Replace with your SVG resource ID
+                    painter = painterResource(id = R.drawable.ic_persona),
                     contentDescription = "Icono persona",
                     modifier = Modifier.size(16.dp),
-                    colorFilter = ColorFilter.tint(Color.Black),
+                    colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
                 )
                 Text(
                     text = "ABAlva",
@@ -132,7 +133,7 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .height((screenHeightDp * 0.12).dp)   // SCREEN: 12%
-            .background(White400), // Change color
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White), // Change color
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
@@ -145,7 +146,7 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
                 painter = painterResource(id = R.drawable.ic_telefono), // Replace with your SVG resource ID
                 contentDescription = "Universidad de Lima",
                 modifier = Modifier.size(25.dp),
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
@@ -163,7 +164,7 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
                 painter = painterResource(id = R.drawable.ic_mail), // Replace with your SVG resource ID
                 contentDescription = "Universidad de Lima",
                 modifier = Modifier.size(25.dp),
-                colorFilter = ColorFilter.tint(Color.Black),
+                colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
             )
             Text(
                 modifier = Modifier.padding(start = 16.dp),
@@ -176,27 +177,60 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
 }
 
 @Composable
-fun BtnData(screenHeightDp: Int){
+fun BtnData(screenHeightDp: Int, screenWidthDp: Int){
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height((screenHeightDp * 0.09).dp)   // SCREEN: 9%
-            .background(White800) // Change color
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Change color
     ) {
-        // Button
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(2f))
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .height((screenHeightDp * 0.07).dp) // SCREEN: 7%
+                    .width((screenWidthDp * 0.75).dp)
+                    .background(Orange400)
+            ) {
+                Text(text = "Actualizar Datos", color = (if (isSystemInDarkTheme()) Color.White else Color.Black)) // Set text color to white
+            }
+            Spacer(modifier = Modifier.weight(2f))
+
+        }
     }
 }
 
 @Composable
-fun BtnLogOut(screenHeightDp: Int){
+fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int){
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = (screenHeightDp * 0.26).dp) // SCREEN: 26%
             .height((screenHeightDp * 0.9).dp)   // SCREEN: 9%
-            .background(White800) // Change color
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Change color
     ) {
-        // Button
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(2f))
+            Button(
+                onClick = {},
+                modifier = Modifier
+                    .height((screenHeightDp * 0.07).dp) // SCREEN: 7%
+                    .width((screenWidthDp * 0.75).dp)
+                    .background(Orange400)
+            ) {
+                Text(text = "Cerrar Sesión", color = (if (isSystemInDarkTheme()) Color.White else Color.Black)) // Set text color to white
+            }
+            Spacer(modifier = Modifier.weight(2f))
+        }
     }
 }
 
@@ -213,7 +247,7 @@ fun Activities(screenWidthDp: Int, screenHeightDp: Int){
             modifier = Modifier
                 .fillMaxWidth()
                 .height((screenHeightDp * 0.16).dp)   // SCREEN: 16%
-                .background(White400) // Change color
+                .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Change color
         ) {
             Column(
                 modifier = Modifier.padding(start = (screenWidthDp * 0.1).dp)
@@ -280,14 +314,14 @@ fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White400) // Background color, changes in dark mode
+            .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Background color, changes in dark mode
     ) {
         TopBar(screenHeightDp, screenWidthDp)
         UserCard(screenHeightDp, screenWidthDp, imageUrl)
         ContactInfo(screenHeightDp, screenWidthDp)
-        BtnData(screenHeightDp)
+        BtnData(screenHeightDp, screenWidthDp)
         Activities(screenWidthDp, screenHeightDp)
-        BtnLogOut(screenHeightDp)
+        BtnLogOut(screenHeightDp, screenWidthDp)
     }
 }
 
