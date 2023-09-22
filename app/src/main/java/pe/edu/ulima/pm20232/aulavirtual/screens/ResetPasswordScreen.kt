@@ -73,8 +73,7 @@ fun TBar(screenHeightDp: Int, screenWidthDp: Int) {
    Row(
       modifier = Modifier
          .fillMaxWidth()
-         .height((screenHeightDp * 0.08).dp)
-         .background(if (isSystemInDarkTheme()) Color.Black else Color.White),
+         .height((screenHeightDp * 0.08).dp),
       verticalAlignment = Alignment.CenterVertically
    ) {
       Image(
@@ -113,7 +112,7 @@ fun TScreen(){
                painter = painterResource(id = R.drawable.ic_ulima), // Replace with your SVG resource ID
                contentDescription = "Universidad de Lima",
                modifier = Modifier.size(120.dp),
-               colorFilter = ColorFilter.tint(White400),
+               colorFilter = ColorFilter.tint(Orange400),
             )
             // Título de la pantalla "Gimnasio Ulima".
             Text(text ="Gimnasio ULima", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(top = 12.dp))

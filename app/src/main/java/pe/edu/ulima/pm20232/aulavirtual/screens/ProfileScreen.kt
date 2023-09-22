@@ -251,6 +251,8 @@ fun Activities(screenWidthDp: Int, screenHeightDp: Int){
         ) {
             Column(
                 modifier = Modifier.padding(start = (screenWidthDp * 0.1).dp)
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
             ) {
 
                 Text(
@@ -277,6 +279,8 @@ fun Activities(screenWidthDp: Int, screenHeightDp: Int){
                     start = (screenWidthDp * 0.1).dp,
                     end = (screenWidthDp * 0.1).dp
                 )
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
                     modifier = Modifier
