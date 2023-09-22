@@ -69,29 +69,23 @@ import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 import java.net.URL
 
 @Composable
-fun BackButton(
-   navController: NavController,
-   modifier: Modifier = Modifier,
-   icon: ImageVector = Icons.Default.ArrowBack,
-   contentDescription: String = "Back"
-) {
+fun TBar(screenHeightDp: Int, screenWidthDp: Int) {
    Row(
-      modifier = modifier
+      modifier = Modifier
          .fillMaxWidth()
-         .padding(16.dp),
-      horizontalArrangement = Arrangement.Start,
+         .height((screenHeightDp * 0.08).dp)
+         .background(if (isSystemInDarkTheme()) Color.Black else Color.White),
       verticalAlignment = Alignment.CenterVertically
    ) {
-      /*
-      Icon(
-         imageVector = icon,
-         contentDescription = contentDescription,
-         tint = Color.Black, // Cambia el color según tus preferencias
-         modifier = Modifier.clickable {
-            navController.popBackStack()
-         }
-      )*/
-      Spacer(modifier = Modifier.padding(4.dp)) // Espaciador opcional para dar espacio entre el icono y otros elementos
+      Image(
+         painter = painterResource(id = R.drawable.ic_arrow),
+         contentDescription = "Arrow",
+         modifier = Modifier
+            .size(40.dp)
+            .padding(start = (screenWidthDp * 0.05).dp),
+         colorFilter = ColorFilter.tint(Color.Gray),
+      )
+      Spacer(modifier = Modifier.weight(1f)) // Add a Spacer with weight
    }
 }
 
@@ -236,8 +230,8 @@ fun ResetPasswordScreen(viewModel: ResetPasswordViewModel, navController: NavHos
    val configuration = LocalConfiguration.current
    val screenWidthDp = configuration.screenWidthDp
    val screenHeightDp = configuration.screenHeightDp
-   BackButton(navController = navController)
-   TopScreen()
+   TScreen()
+   TBar(screenHeightDp, screenWidthDp)
    BottomSheet(screenWidthDp, screenHeightDp, viewModel)
    if(viewModel.bottomSheetCollapse){
       Reset()
