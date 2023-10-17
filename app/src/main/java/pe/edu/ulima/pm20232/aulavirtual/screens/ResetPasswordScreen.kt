@@ -225,7 +225,7 @@ fun Reset(){
 }
 
 @Composable
-fun ResetPasswordScreen(viewModel: ResetPasswordViewModel, navController: NavHostController) {
+fun ResetPasswordScreen(navController: NavHostController, viewModel: ResetPasswordViewModel) {
    val configuration = LocalConfiguration.current
    val screenWidthDp = configuration.screenWidthDp
    val screenHeightDp = configuration.screenHeightDp

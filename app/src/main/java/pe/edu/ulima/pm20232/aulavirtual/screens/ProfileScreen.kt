@@ -19,9 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import pe.edu.ulima.pm20232.aulavirtual.R
+import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange800
@@ -330,7 +332,7 @@ fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController, viewModel: ProfileScreenViewModel) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp

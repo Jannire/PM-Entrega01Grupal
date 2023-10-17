@@ -85,7 +85,8 @@ fun LoginForm(
     screenHeightDp: Int,
     viewModel: LoginScreenViewModel,
     coroutineScope: CoroutineScope,
-    bottomSheetScaffoldState: BottomSheetScaffoldState
+    bottomSheetScaffoldState: BottomSheetScaffoldState,
+    navController: NavHostController
 ){
     var termsDisabled = true
 
@@ -115,7 +116,6 @@ fun LoginForm(
                 ){
                     Text1(text ="INGRESA ESTA INFORMACIÓN", fontWeight = FontWeight.Medium, fontSize = 13.sp)
                     TextFieldWithLeadingIcon(
-
                         leadingIcon = Icons.Default.Person, // Replace with your desired icon
                         placeholder = "Usuario",
                         text = viewModel.user,
@@ -139,9 +139,10 @@ fun LoginForm(
                         horizontalArrangement = Arrangement.Center,
                     ){
                         ButtonWithIcon("LOGIN", Icons.Default.Person, {
-                            viewModel.access()
+                            viewModel.access(navController)
                         })
-                    }
+                    }//No hay terminos y condiciones en la entrega final
+
                 }
             }
         }
@@ -206,7 +207,7 @@ fun TermsAndConditions(viewModel: LoginScreenViewModel, bottomSheetScaffoldState
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheet(screenWidthDp: Int, screenHeightDp: Int, viewModel: LoginScreenViewModel){
+fun BottomSheet(screenWidthDp: Int, screenHeightDp: Int, viewModel: LoginScreenViewModel, navController: NavHostController){
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
@@ -219,12 +220,12 @@ fun BottomSheet(screenWidthDp: Int, screenHeightDp: Int, viewModel: LoginScreenV
         sheetPeekHeight = 0.dp,
         backgroundColor = Color.Transparent
     ) {
-        LoginForm(screenWidthDp, screenHeightDp, viewModel, coroutineScope, bottomSheetScaffoldState)
+        LoginForm(screenWidthDp, screenHeightDp, viewModel, coroutineScope, bottomSheetScaffoldState, navController)
     }
 }
 
 @Composable
-fun GoToReset(){
+fun GoToReset(navController: NavHostController){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -241,6 +242,7 @@ fun GoToReset(){
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
                     println("Cambiar Contraseña")
+                    navController.navigate("reset_password")
                 },
             )
         }
@@ -253,8 +255,8 @@ fun LoginScreen(viewModel: LoginScreenViewModel, navController: NavHostControlle
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
     TopScreen()
-    BottomSheet(screenWidthDp, screenHeightDp, viewModel)
+    BottomSheet(screenWidthDp, screenHeightDp, viewModel, navController)
     if(viewModel.bottomSheetCollapse){
-        GoToReset()
+        GoToReset(navController)
     }
 }
