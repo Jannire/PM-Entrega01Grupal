@@ -46,6 +46,7 @@ import pe.edu.ulima.pm20232.aulavirtual.components.TopNavigationBar
 import pe.edu.ulima.pm20232.aulavirtual.configs.AlertDialogExample
 import pe.edu.ulima.pm20232.aulavirtual.configs.BottomBarScreen
 import pe.edu.ulima.pm20232.aulavirtual.configs.TopBarScreen
+import pe.edu.ulima.pm20232.aulavirtual.screenmodels.CreateAccountViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.HomeScreenViewModel
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val profileScreenViewModel by viewModels<ProfileScreenViewModel>()
     private val homeScreenViewModel by viewModels<HomeScreenViewModel>()
     private val resetScreenViewModel by viewModels<ResetPasswordViewModel>()
+    private val createAccountViewModel by viewModels<CreateAccountViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -281,6 +283,10 @@ class MainActivity : ComponentActivity() {
                                 composable(route = "login") {
                                     Log.d("ROUTER", "login")
                                     LoginScreen(loginScreenViewModel, navController)
+                                }
+                                composable(route = "create_account") {
+                                    Log.d("ROUTER", "create account")
+                                    CreateAccountScreen(createAccountViewModel, navController)
                                 }
                             }
                         }
