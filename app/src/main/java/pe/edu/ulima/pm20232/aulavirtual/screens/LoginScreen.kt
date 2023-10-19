@@ -142,7 +142,20 @@ fun LoginForm(
                             viewModel.access(navController)
                         })
                     }//No hay terminos y condiciones en la entrega final
-
+                    Row() {
+                        Text1(text = "¿No tienes una cuenta? ", textAlign = TextAlign.End, color = (if (isSystemInDarkTheme()) White400 else Gray800), fontSize = 14.sp)
+                        Text1(
+                            text = "Creala aquí",
+                            textAlign = TextAlign.End,
+                            color = Orange400,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clickable {
+                                println("Crear Cuenta")
+                                navController.navigate("create_account")
+                            },
+                        )
+                    }
                 }
             }
         }
