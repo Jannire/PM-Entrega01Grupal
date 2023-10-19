@@ -23,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.getValue
@@ -51,6 +52,7 @@ import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.HomeScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ResetPasswordViewModel
+import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ExerciseScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screens.*
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.AulaVirtualTheme
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
@@ -61,6 +63,7 @@ class MainActivity : ComponentActivity() {
     private val homeScreenViewModel by viewModels<HomeScreenViewModel>()
     private val resetScreenViewModel by viewModels<ResetPasswordViewModel>()
     private val createAccountViewModel by viewModels<CreateAccountViewModel>()
+    private val exerciseScreenViewModel by viewModels<ExerciseScreenViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,9 +112,9 @@ class MainActivity : ComponentActivity() {
                                         icon = Icons.Default.Home
                                     ),
                                     BottomBarScreen(
-                                        route = "home", //////POR FAVOR AL QUE LE TOCA PONER LA RUTA CORRECTA!!!
+                                        route = "exercises",
                                         title = "Ejercicios",
-                                        icon = Icons.Default.Person //////POR FAVOR AL QUE LE TOCA PONER ICONO!!!
+                                        icon = Icons.Default.List
                                     ),
                                     BottomBarScreen(
                                         title = "Compartir",
@@ -288,6 +291,23 @@ class MainActivity : ComponentActivity() {
                                     Log.d("ROUTER", "create account")
                                     CreateAccountScreen(createAccountViewModel, navController)
                                 }
+                                composable(route = "exercises") {
+                                    Log.d("EXERCISES", "exercises screen")
+                                    ExerciseScreen(navController, exerciseScreenViewModel)
+                                }
+                                // Cambiar rutas para el detalle de cada ejercicio:
+                                /*
+                                composable(route = "pokemon/edit?pokemon_id={pokemon_id}", arguments = listOf(
+                                    navArgument("pokemon_id") {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    }
+                                ), content = { entry ->
+                                    val pokemonId = entry.arguments?.getInt("pokemon_id")!!
+                                    pokemonDetailScreenViewModel.pokemonId = pokemonId
+                                    PokemonDetailScreen(navController, pokemonDetailScreenViewModel)
+                                })
+                                 */
                             }
                         }
                     )
