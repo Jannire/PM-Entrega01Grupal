@@ -273,7 +273,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "home") {
                                     Log.d("HOME", "home screen")
-                                    HomeScreen(navController, homeScreenViewModel)
+                                    HomeScreen(navController,LoginScreenViewModel(), homeScreenViewModel)
                                 }
                                 composable(route = "reset_password") {
                                     Log.d("ROUTER", "reset password")

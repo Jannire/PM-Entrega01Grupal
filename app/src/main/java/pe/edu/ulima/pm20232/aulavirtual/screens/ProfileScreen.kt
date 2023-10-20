@@ -237,85 +237,6 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int){
 }
 
 @Composable
-fun Activities(screenWidthDp: Int, screenHeightDp: Int){
-    Column() {
-        Image(
-            painter = painterResource(id = R.drawable.linea), // Replace with your SVG resource ID
-            contentDescription = "linea",
-            modifier = Modifier.width(screenWidthDp.dp),
-            colorFilter = ColorFilter.tint(Orange400),
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height((screenHeightDp * 0.16).dp)   // SCREEN: 16%
-                .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Change color
-        ) {
-            Column(
-                modifier = Modifier.padding(start = (screenWidthDp * 0.1).dp)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-            ) {
-
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally), // Center the text horizontally
-                    text = "22", // Add Advanced Text
-                    textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
-                )
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    text = "Ejercicios Asignados", // Add Advanced Text
-                    textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
-                    fontSize = 15.sp
-                )
-            }
-            Column(
-                modifier = Modifier.padding(
-                    start = (screenWidthDp * 0.1).dp,
-                    end = (screenWidthDp * 0.1).dp
-                )
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    text = "4", // Add Advanced Text
-                    textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
-                    fontSize = 40.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
-
-                    )
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally),
-                    text = "Partes del cuerpo entrenadas", // Add Advanced Text
-                    textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
-                    fontSize = 15.sp
-                )
-            }
-
-        }
-        Image(
-            painter = painterResource(id = R.drawable.linea), // Replace with your SVG resource ID
-            contentDescription = "linea",
-            modifier = Modifier.width(screenWidthDp.dp),
-            colorFilter = ColorFilter.tint(Orange400),
-        )
-    }
-}
-
-@Composable
 fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
     Column(
         modifier = Modifier
@@ -326,7 +247,6 @@ fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
         UserCard(screenHeightDp, screenWidthDp, imageUrl)
         ContactInfo(screenHeightDp, screenWidthDp)
         BtnData(screenHeightDp, screenWidthDp)
-        Activities(screenWidthDp, screenHeightDp)
         BtnLogOut(screenHeightDp, screenWidthDp)
     }
 }

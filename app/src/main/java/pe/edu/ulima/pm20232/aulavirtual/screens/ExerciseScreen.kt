@@ -39,7 +39,7 @@ fun ExercisesGrid(navController: NavController, model: ExerciseScreenViewModel){
     var intValue by remember { mutableStateOf(0) }
     val exercises by model.exercises.collectAsState()
     LazyVerticalGrid(
-        cells = GridCells.Fixed(4) // Specify the number of columns
+        cells = GridCells.Fixed(3) // Specify the number of columns
     ) {
         items(exercises.size) { i ->
             Column(){

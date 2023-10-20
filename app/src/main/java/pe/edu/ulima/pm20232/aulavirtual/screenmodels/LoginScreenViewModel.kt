@@ -7,8 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import pe.edu.ulima.pm20232.aulavirtual.services.UserService
-
-
 class LoginScreenViewModel: ViewModel() {
     var user: String by mutableStateOf("")
     var password: String by mutableStateOf("")
