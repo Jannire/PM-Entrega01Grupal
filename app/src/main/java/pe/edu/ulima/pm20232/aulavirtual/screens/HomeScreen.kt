@@ -2,6 +2,7 @@ package pe.edu.ulima.pm20232.aulavirtual.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -59,36 +60,65 @@ import java.net.URL
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, userId: Int?){
+fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, userId: Int) {
     var intValue by remember { mutableStateOf(0) }
     val exercises by model.exercises.collectAsState()
+    var selectedExerciseIndex by remember { mutableStateOf(-1) }
 
     LazyVerticalGrid(
         cells = GridCells.Fixed(3) // Specify the number of columns
     ) {
         items(exercises.size) { i ->
-            Column(){
+            Column() {
                 println(exercises[i].imageUrl)
-                Image(
-                    painter = rememberImagePainter(data = exercises[i].imageUrl),
-                    contentDescription = exercises[i].name,
+                Box(
                     modifier = Modifier
                         .size(100.dp)
                         .padding(bottom = 10.dp)
                         .clickable {
-                            intValue = exercises[i].id.toInt()
-                            navController.navigate("${intValue}")
-                        },
-                )
+                            selectedExerciseIndex = i
+                        }
+                ) {
+                    Image(
+                        painter = rememberImagePainter(data = exercises[i].imageUrl),
+                        contentDescription = exercises[i].name
+                    )
+                }
                 Text(exercises[i].name)
+                if (selectedExerciseIndex == i) {
+                    val exerciseMember = model.getExerciseMemberForUser(userId, exercises[i].id)
+                    if (exerciseMember != null) {
+                        ExerciseDetailsMarkdown(exercises[i], exerciseMember)
+                    }
+                }
             }
-
         }
     }
 }
-
+//generar markdown por click de bloque
+@Composable
+fun ExerciseDetailsMarkdown(exercise: Exercise, exerciseMember: ExerciseMember) {
+    val reps = exerciseMember.reps
+    val sets = exerciseMember.sets
+    val markdownText = buildString {
+        appendLine("${exercise.name}")
+        appendLine("${reps} ____ ${sets}")
+        appendLine("repeticiones ____ sets")
+        appendLine("Description")
+        appendLine(exercise.description)
+        appendLine("Video URL")
+        appendLine(exercise.videoUrl)
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        MarkDown(text = markdownText, modifier = Modifier.fillMaxSize())
+    }
+}
 
 @Composable
 fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel, userId: Int) {
@@ -96,12 +126,7 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
 
-    val user = remember { loginModel.user }
-    println(user)
-    val password = remember { loginModel.password }
-    println(password)
-
-    //recibir id user
+    // Receive user id
     val (assignedExerciseCount, trainedBodyPartsCount) = remember {
         model.countAssignedExercises(userId) // Use a default value in case userId is null
     }
@@ -109,7 +134,7 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     model.getBodyParts()
 
     if (userId != null) {
-        //recibe el id user
+        // Receive the user id
         model.listAssignedExercises(userId)
     } else {
         model.listAllExercises()
@@ -193,7 +218,8 @@ fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWid
                 .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
         ) {
             Column(
-                modifier = Modifier.padding(start = (screenWidthDp * 0.1).dp)
+                modifier = Modifier
+                    .padding(start = (screenWidthDp * 0.1).dp)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
@@ -217,10 +243,11 @@ fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWid
                 )
             }
             Column(
-                modifier = Modifier.padding(
-                    start = (screenWidthDp * 0.1).dp,
-                    end = (screenWidthDp * 0.1).dp
-                )
+                modifier = Modifier
+                    .padding(
+                        start = (screenWidthDp * 0.1).dp,
+                        end = (screenWidthDp * 0.1).dp
+                    )
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {

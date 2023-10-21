@@ -88,7 +88,9 @@ class HomeScreenViewModel: ViewModel(){
         return Pair(assignedExerciseCount, trainedBodyParts.size)
     }
 
-    fun getExerciseMember(exerciseId: Int): ExerciseMember {
-        TODO("Not yet implemented")
+    fun getExerciseMemberForUser(userId: Int, id: Int): ExerciseMember? {
+        return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == id }
     }
+
+
 }
