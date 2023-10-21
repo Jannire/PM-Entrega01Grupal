@@ -2,11 +2,13 @@ package pe.edu.ulima.pm20232.aulavirtual.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,12 +25,17 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import pe.edu.ulima.pm20232.aulavirtual.R
+import pe.edu.ulima.pm20232.aulavirtual.models.Member
+import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
+import pe.edu.ulima.pm20232.aulavirtual.services.MemberService
+import pe.edu.ulima.pm20232.aulavirtual.services.UserService
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White800
+import java.util.Objects.toString
 
 @Composable
 fun ImageView(url: String, height: Int, width: Int) {
@@ -45,7 +52,7 @@ fun ImageView(url: String, height: Int, width: Int) {
 }
 
 @Composable
-fun TopBar(screenHeightDp: Int, screenWidthDp: Int) {
+fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,7 +65,8 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int) {
             contentDescription = "Arrow",
             modifier = Modifier
                 .size(40.dp)
-                .padding(start = (screenWidthDp * 0.05).dp),
+                .padding(start = (screenWidthDp * 0.05).dp)
+                .clickable { navController.navigate("home") },
             colorFilter = ColorFilter.tint(Color.Gray),
         )
         Spacer(modifier = Modifier.weight(1f)) // Add a Spacer with weight
@@ -74,7 +82,17 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int) {
 }
 
 @Composable
-fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
+fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: Int) {
+
+    val memberService: MemberService = MemberService()
+
+    val lname = toString(memberService.getMemberLastNames(user))
+    val name = toString(memberService.getMemberNames(user))
+    val dni = toString(memberService.getMemberDni(user))
+    val level = toString(memberService.getMemberLevelId(user))
+    val img = toString(memberService.getMemberImageUrl(user))
+
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,21 +101,23 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
             .padding(start = (screenWidthDp * 0.1).dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ImageView(url = imageUrl, width = 100, height = 100) // No adaptability
+        ImageView(url = img, width = 100, height = 100) // No adaptability
         Column(
             modifier = Modifier
                 .padding(start = (screenWidthDp * 0.08).dp),
         ) {
-            Text(
-                text = "Andrea Alva",
-                style = TextStyle(
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black,
-                ),
-                modifier = Modifier.padding(bottom = (screenHeightDp * 0.01).dp)
-            )
+            if (name != null) {
+                Text(
+                    text = name+" "+lname,
+                    style = TextStyle(
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        color = if (isSystemInDarkTheme()) White400 else Color.Black,
+                    ),
+                    modifier = Modifier.padding(bottom = (screenHeightDp * 0.01).dp)
+                )
+            }
             Row(
                 modifier = Modifier.padding(bottom = (screenHeightDp * 0.01).dp)
             ) {
@@ -108,7 +128,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
                     colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
                 )
                 Text(
-                    text = "ABAlva",
+                    text = dni,
                     style = TextStyle(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.Normal,
@@ -118,7 +138,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
                 )
             }
             Text(
-                text = "Estudiante",
+                text = level,
                 style = TextStyle(
                     fontFamily = FontFamily.Default,
                     fontWeight = FontWeight.Normal,
@@ -130,7 +150,16 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
     }
 }
 @Composable
-fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
+fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, user: Int) {
+
+    val memberService: MemberService = MemberService()
+
+    val telefono = memberService.getMemberPhoneByCode(user)
+    var email = memberService.getMemberEmailByCode(user)
+
+
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -150,12 +179,14 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
                 modifier = Modifier.size(25.dp),
                 colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
             )
-            Text(
-                modifier = Modifier.padding(start = 16.dp),
-                text = "999 888 777", // Add Advanced Text
-                color = if (isSystemInDarkTheme()) White400 else Color.Gray, // Apply the custom text color here
-                fontSize = 15.sp
-            )
+            if (telefono != null) {
+                Text(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = telefono, // Add Advanced Text
+                    color = if (isSystemInDarkTheme()) White400 else Color.Gray, // Apply the custom text color here
+                    fontSize = 15.sp
+                )
+            }
         }
         Row(
             modifier = Modifier
@@ -168,12 +199,14 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int) {
                 modifier = Modifier.size(25.dp),
                 colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
             )
-            Text(
-                modifier = Modifier.padding(start = 16.dp),
-                text = "20210274@aloe.ulima.edu.pe", // Add Advanced Text
-                color = if (isSystemInDarkTheme()) White400 else Color.Gray, // Apply the custom text color here
-                fontSize = 15.sp
-            )
+            if (email != null) {
+                Text(
+                    modifier = Modifier.padding(start = 16.dp),
+                    text = email, // Add Advanced Text
+                    color = if (isSystemInDarkTheme()) White400 else Color.Gray, // Apply the custom text color here
+                    fontSize = 15.sp
+                )
+            }
         }
     }
 }
@@ -208,7 +241,7 @@ fun BtnData(screenHeightDp: Int, screenWidthDp: Int){
 }
 
 @Composable
-fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int){
+fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int, navController: NavController){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -223,11 +256,11 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int){
         ) {
             Spacer(modifier = Modifier.weight(2f))
             Button(
-                onClick = {},
+                onClick = { navController.navigate("login") },
                 modifier = Modifier
                     .height((screenHeightDp * 0.07).dp) // SCREEN: 7%
                     .width((screenWidthDp * 0.75).dp)
-                    .background(Orange400)
+                    .background(Orange400),
             ) {
                 Text(text = "Cerrar Sesión", color = (if (isSystemInDarkTheme()) Color.White else Color.Black)) // Set text color to white
             }
@@ -237,26 +270,50 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int){
 }
 
 @Composable
-fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String) {
+fun FinalScreen(
+    screenHeightDp: Int,
+    screenWidthDp: Int,
+    imageUrl: String,
+    loginModel: LoginScreenViewModel,
+    navController: NavController,
+    userId: Int) {
+
+    val user = loginModel.user
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Background color, changes in dark mode
     ) {
-        TopBar(screenHeightDp, screenWidthDp)
-        UserCard(screenHeightDp, screenWidthDp, imageUrl)
-        ContactInfo(screenHeightDp, screenWidthDp)
+        TopBar(screenHeightDp, screenWidthDp, navController)
+        UserCard(screenHeightDp, screenWidthDp, imageUrl, userId)
+        ContactInfo(screenHeightDp, screenWidthDp, userId)
         BtnData(screenHeightDp, screenWidthDp)
-        BtnLogOut(screenHeightDp, screenWidthDp)
+        BtnLogOut(screenHeightDp, screenWidthDp, navController)
     }
 }
 
 @Composable
-fun ProfileScreen(navController: NavController, viewModel: ProfileScreenViewModel) {
+fun ProfileScreen(navController: NavController, loginModel: LoginScreenViewModel, viewModel: ProfileScreenViewModel, userId: Int) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
     val imageUrl =
         "https://wallpapers.com/images/hd/cute-cat-eyes-profile-picture-uq3edzmg1guze2hh.jpg" // Replace with your image URL
-    FinalScreen(screenHeightDp, screenWidthDp, imageUrl)
+    val userId = 24
+
+    FinalScreen(screenHeightDp, screenWidthDp, imageUrl, loginModel, navController, userId)
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
