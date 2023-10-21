@@ -1,24 +1,23 @@
 package pe.edu.ulima.pm20232.aulavirtual.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -48,14 +47,24 @@ import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.mukesh.MarkDown
+import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
+import pe.edu.ulima.pm20232.aulavirtual.models.ExerciseMember
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
-
+import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseMemberService
+import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseService
+import pe.edu.ulima.pm20232.aulavirtual.services.UserService
+import java.net.URL
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel){
+fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, userId: Int?){
     var intValue by remember { mutableStateOf(0) }
     val exercises by model.exercises.collectAsState()
+
     LazyVerticalGrid(
         cells = GridCells.Fixed(3) // Specify the number of columns
     ) {
@@ -70,39 +79,56 @@ fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel){
                         .padding(bottom = 10.dp)
                         .clickable {
                             intValue = exercises[i].id.toInt()
-                            navController.navigate("${intValue}ejercicios/abdomen01.png")
+                            navController.navigate("${intValue}")
                         },
                 )
                 Text(exercises[i].name)
             }
+
         }
     }
 }
 
+
 @Composable
-fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel){
+fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel, userId: Int) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
 
     val user = remember { loginModel.user }
+    println(user)
     val password = remember { loginModel.password }
+    println(password)
+
+    //recibir id user
+    val (assignedExerciseCount, trainedBodyPartsCount) = remember {
+        model.countAssignedExercises(userId) // Use a default value in case userId is null
+    }
 
     model.getBodyParts()
-    model.listAllExercises()
+
+    if (userId != null) {
+        //recibe el id user
+        model.listAssignedExercises(userId)
+    } else {
+        model.listAllExercises()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-    ){
-        Activities(screenWidthDp , screenHeightDp)
-        SelectOpitions(model)
-        ExercisesGrid(navController, model)
+    ) {
+        Activities(assignedExerciseCount, trainedBodyPartsCount, screenWidthDp, screenHeightDp)
+        SelectOptions(model)
+        ExercisesGrid(navController, model, userId)
     }
 }
 
+
 @Composable
-fun SelectOpitions(model: HomeScreenViewModel) {
+fun SelectOptions(model: HomeScreenViewModel) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
@@ -146,6 +172,7 @@ fun SelectOpitions(model: HomeScreenViewModel) {
                     model.filterByBodyParts(key)
                     selectedText = value
                     expanded = false
+                    println()
                 })
                 {
                     Text(text = value,
@@ -157,37 +184,35 @@ fun SelectOpitions(model: HomeScreenViewModel) {
 }
 
 @Composable
-fun Activities(screenWidthDp: Int, screenHeightDp: Int){
-    Column() {
-
+fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWidthDp: Int, screenHeightDp: Int) {
+    Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height((screenHeightDp * 0.16).dp)   // SCREEN: 16%
-                .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Change color
+                .height((screenHeightDp * 0.16).dp)
+                .background(if (isSystemInDarkTheme()) Color.Black else Color.White)
         ) {
             Column(
                 modifier = Modifier.padding(start = (screenWidthDp * 0.1).dp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center
             ) {
-
                 Text(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally), // Center the text horizontally
-                    text = "22", // Add Advanced Text
+                        .align(Alignment.CenterHorizontally),
+                    text = assignedExerciseCount.toString(),
                     textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
+                    color = if (isSystemInDarkTheme()) White400 else Color.Black,
                     fontSize = 40.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
+                    fontFamily = FontFamily.SansSerif
                 )
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    text = "Ejercicios Asignados", // Add Advanced Text
+                    text = "Ejercicios Asignados",
                     textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
+                    color = if (isSystemInDarkTheme()) White400 else Color.Black,
                     fontSize = 15.sp
                 )
             }
@@ -197,35 +222,33 @@ fun Activities(screenWidthDp: Int, screenHeightDp: Int){
                     end = (screenWidthDp * 0.1).dp
                 )
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    text = "4", // Add Advanced Text
+                    text = trainedBodyPartsCount.toString(),
                     textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
+                    color = if (isSystemInDarkTheme()) White400 else Color.Black,
                     fontSize = 40.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.SansSerif,
-
-                    )
+                    fontFamily = FontFamily.SansSerif
+                )
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),
-                    text = "Partes del cuerpo entrenadas", // Add Advanced Text
+                    text = "Partes del cuerpo entrenadas",
                     textAlign = TextAlign.Center,
-                    color = if (isSystemInDarkTheme()) White400 else Color.Black, // Apply the custom text color here
+                    color = if (isSystemInDarkTheme()) White400 else Color.Black,
                     fontSize = 15.sp
                 )
             }
-
         }
         Image(
-            painter = painterResource(id = R.drawable.linea), // Replace with your SVG resource ID
+            painter = painterResource(id = R.drawable.linea),
             contentDescription = "linea",
             modifier = Modifier.width(screenWidthDp.dp),
-            colorFilter = ColorFilter.tint(Orange400),
+            colorFilter = ColorFilter.tint(Orange400)
         )
     }
 }

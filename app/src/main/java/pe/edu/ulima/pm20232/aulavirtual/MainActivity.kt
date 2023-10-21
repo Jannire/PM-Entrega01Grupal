@@ -277,7 +277,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "home") {
                                     Log.d("HOME", "home screen")
-                                    HomeScreen(navController,LoginScreenViewModel(), homeScreenViewModel)
+                                    HomeScreen(navController,LoginScreenViewModel(), homeScreenViewModel,0)
                                 }
                                 composable(route = "reset_password") {
                                     Log.d("ROUTER", "reset password")
@@ -299,6 +299,17 @@ class MainActivity : ComponentActivity() {
                                     Log.d("EXERCISES", "exercises screen")
                                     ExerciseScreen(navController, exerciseScreenViewModel)
                                 }
+
+                                composable(route = "home?user_id={user_id}", arguments = listOf(
+                                    navArgument("user_id") {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    }
+                                ), content = { entry ->
+                                    val user_id = entry.arguments?.getInt("user_id")!!
+                                    HomeScreen(navController, LoginScreenViewModel(), homeScreenViewModel, user_id);
+                                    })
+
                                 // Cambiar rutas para el detalle de cada ejercicio:
                                 /*
                                 composable(route = "pokemon/edit?pokemon_id={pokemon_id}", arguments = listOf(
