@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val blackList: List<String> = listOf("profile", "login", "create_account")
+                    val blackList: List<String> = listOf("profile", "login", "create_account", "reset_password")
                     val currentRoute = navBackStackEntry?.destination?.route
                     var showDialogShare by remember { mutableStateOf(false) }
                     var showDialogAbout by remember { mutableStateOf(false) }
@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
                                                         // Start the activity with the intent
                                                         sendMessage.launch(intent)
                                                     })//
-                                                    .size(40.dp, 40.dp)
+                                                        .size(40.dp, 40.dp)
                                                 )
                                                 Box(
                                                     modifier = Modifier
