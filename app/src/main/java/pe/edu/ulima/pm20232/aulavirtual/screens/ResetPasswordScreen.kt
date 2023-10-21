@@ -172,12 +172,11 @@ fun ResetPassForm(
                )
                TextFieldWithLeadingIcon(
                   leadingIcon = Icons.Default.Email, // Replace with your desired icon
-                  text = viewModel.password,
+                  text = viewModel.correo,
                   placeholder = "Correo",
                   onTextChanged = {
-                     viewModel.password = it
-                  },
-                  isPassword = true,
+                     viewModel.correo = it
+                  }
                )
                Row(
                   modifier = Modifier
