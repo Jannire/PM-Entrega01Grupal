@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetState
@@ -24,6 +25,7 @@ import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
@@ -69,7 +71,7 @@ import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 import java.net.URL
 
 @Composable
-fun TBar(screenHeightDp: Int, screenWidthDp: Int) {
+fun TBar(screenHeightDp: Int, screenWidthDp: Int, navController: NavHostController) {
    Row(
       modifier = Modifier
          .fillMaxWidth()
@@ -79,7 +81,10 @@ fun TBar(screenHeightDp: Int, screenWidthDp: Int) {
       Image(
          painter = painterResource(id = R.drawable.ic_arrow),
          contentDescription = "Arrow",
-         modifier = Modifier
+         modifier = Modifier.clickable{
+            println("Regresar a login")
+            navController.navigate("login")
+         }
             .size(40.dp)
             .padding(start = (screenWidthDp * 0.05).dp),
          colorFilter = ColorFilter.tint(Color.Gray),
@@ -194,6 +199,25 @@ fun ResetPassForm(
    }
 }
 
+@Composable
+fun ShowPopup(message: String) {
+   val cardElevation = 8.dp
+   val cardWidth = 300.dp
+   val cardHeight = 150.dp
+
+   AlertDialog(
+      onDismissRequest = { /* Do nothing */ },
+      title = { Text(text = "Correo enviado") },
+      text = { Text(text = message) },
+      buttons = {
+         Column {
+            TextButton(onClick = { /* Do nothing */ }) {
+               Text(text = "Aceptar")
+            }
+         }
+      }
+   )
+}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -229,7 +253,7 @@ fun ResetPasswordScreen(navController: NavHostController, viewModel: ResetPasswo
    val screenWidthDp = configuration.screenWidthDp
    val screenHeightDp = configuration.screenHeightDp
    TScreen()
-   TBar(screenHeightDp, screenWidthDp)
+   TBar(screenHeightDp, screenWidthDp, navController)
    BottomSheet(screenWidthDp, screenHeightDp, viewModel)
    if(viewModel.bottomSheetCollapse){
       Reset()
