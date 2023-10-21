@@ -70,7 +70,7 @@ import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
 import java.net.URL
 
 @Composable
-fun TB(screenHeightDp: Int, screenWidthDp: Int) {
+fun TB(screenHeightDp: Int, screenWidthDp: Int, navController: NavHostController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,9 +80,13 @@ fun TB(screenHeightDp: Int, screenWidthDp: Int) {
         Image(
             painter = painterResource(id = R.drawable.ic_arrow),
             contentDescription = "Arrow",
-            modifier = Modifier
+            modifier = Modifier.clickable{
+                println("Regresar a login")
+                navController.navigate("login")
+            }
                 .size(40.dp)
                 .padding(start = (screenWidthDp * 0.05).dp),
+
             colorFilter = ColorFilter.tint(Color.Gray),
         )
         Spacer(modifier = Modifier.weight(1f)) // Add a Spacer with weight
@@ -207,7 +211,7 @@ fun CreateAccountForm(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 25.dp),
+                            .padding(top = 0.dp),
                         horizontalArrangement = Arrangement.Center,
                     ){
                         ButtonWithIcon("CREAR CUENTA", Icons.Default.Email, {
@@ -255,8 +259,9 @@ fun CreateAccountScreen(viewModel: CreateAccountViewModel, navController: NavHos
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
     TS()
-    TB(screenHeightDp, screenWidthDp)
+
     BSheet(screenWidthDp, screenHeightDp, viewModel)
+    TB(screenHeightDp, screenWidthDp, navController)
     if(viewModel.bottomSheetCollapse){
         Res()
     }
