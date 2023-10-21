@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val blackList: List<String> = listOf("profile", "login")
+                    val blackList: List<String> = listOf("profile", "login", "create_account")
                     val currentRoute = navBackStackEntry?.destination?.route
                     var showDialogShare by remember { mutableStateOf(false) }
                     var showDialogAbout by remember { mutableStateOf(false) }
