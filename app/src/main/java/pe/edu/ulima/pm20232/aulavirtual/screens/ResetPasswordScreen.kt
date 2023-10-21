@@ -253,8 +253,9 @@ fun ResetPasswordScreen(navController: NavHostController, viewModel: ResetPasswo
    val screenWidthDp = configuration.screenWidthDp
    val screenHeightDp = configuration.screenHeightDp
    TScreen()
-   TBar(screenHeightDp, screenWidthDp, navController)
+
    BottomSheet(screenWidthDp, screenHeightDp, viewModel)
+   TBar(screenHeightDp, screenWidthDp, navController)
    if(viewModel.bottomSheetCollapse){
       Reset()
    }
