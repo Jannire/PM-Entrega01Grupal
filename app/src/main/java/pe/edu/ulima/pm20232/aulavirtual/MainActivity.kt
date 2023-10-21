@@ -1,5 +1,8 @@
 package pe.edu.ulima.pm20232.aulavirtual
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -207,63 +210,42 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            if (showDialogAbout)
-                            {
+                            if (showDialogAbout) {
                                 AlertDialog(
                                     onDismissRequest = {
                                         showDialogAbout = false
                                     },
                                     title = {
-                                        Text(text = "Título del cuadro de diálogo")
+                                        Text(
+                                            text = "Integrantes de Grupo",
+                                            textAlign = TextAlign.Center,
+                                            fontSize = 16.sp,
+                                            modifier = Modifier.padding(bottom = 25.dp)
+                                        )
                                     },
                                     text = {
-                                        val imageUrl = "https://pokefanaticos.com/pokedex/assets/images/pokemon_imagenes/25.png"
-                                        val uri = Uri.parse(imageUrl)
-                                        val painter = rememberImagePainter(
-                                            data = uri.scheme + "://" + uri.host + uri.path + (if (uri.query != null) uri.query else ""),
-                                            builder = {
-                                                // You can apply transformations here if needed
-                                                transformations(CircleCropTransformation())
-                                            }
-                                        )
-                                        Column(){
-                                            Text("Este es un cuadro de diálogo de alerta en Compose. Puedes personalizar su contenido aquí.")
-                                            Row(){
-                                                Image(
-                                                    painter = painter,
-                                                    contentDescription = null, // Set a proper content description if required
-                                                    modifier = Modifier.size(40.dp, 40.dp)
-                                                )
-                                                Image(
-                                                    painter = painter,
-                                                    contentDescription = null, // Set a proper content description if required
-                                                    modifier = Modifier.size(40.dp, 40.dp)
-                                                )
-                                            }
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text("20190857 - Alejandro Gomez", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
+                                            Text("20193553 - Jannire Trujillo", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
+                                            Text("20191412 - Johan Oblitas", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
+                                            Text("20191937 - Leonardo Solimano", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
+                                            Text("20191291 - Renato Migliori", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
+                                            Text("20192003 - Sebastian Torres", fontSize = 13.sp, modifier = Modifier.fillMaxWidth().padding(start = 50.dp))
                                         }
                                     },
                                     confirmButton = {
-                                        TextButton(
-                                            onClick = {
-                                                // Lógica para manejar el botón de confirmación
-                                                showDialogAbout = false
-                                            }
-                                        ) {
-                                            Text("Aceptar")
-                                        }
+                                        // Botón ficticio o nulo
                                     },
                                     dismissButton = {
-                                        TextButton(
-                                            onClick = {
-                                                // Lógica para manejar el botón de descartar
-                                                showDialogAbout = false
-                                            }
-                                        ) {
-                                            Text("Cancelar")
-                                        }
+                                        // Botón ficticio o nulo
                                     }
                                 )
                             }
+
+
 
                             NavHost(navController, startDestination = "login") {
                                 composable(route = "splash") {
