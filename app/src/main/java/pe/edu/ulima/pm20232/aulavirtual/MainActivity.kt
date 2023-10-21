@@ -3,7 +3,6 @@ package pe.edu.ulima.pm20232.aulavirtual
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -11,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,6 +59,11 @@ import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ExerciseScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screens.*
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.AulaVirtualTheme
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.White400
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
 
 class MainActivity : ComponentActivity() {
     private val loginScreenViewModel by viewModels<LoginScreenViewModel>()
@@ -84,6 +89,8 @@ class MainActivity : ComponentActivity() {
                     val currentRoute = navBackStackEntry?.destination?.route
                     var showDialogShare by remember { mutableStateOf(false) }
                     var showDialogAbout by remember { mutableStateOf(false) }
+                    val context = LocalContext.current
+                    val sendMessage = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> }
                     Scaffold(
                         topBar = {
                             if(!blackList.contains(currentRoute)) {
@@ -168,7 +175,18 @@ class MainActivity : ComponentActivity() {
                                                 Image(
                                                     painter = painterWhats,
                                                     contentDescription = "Whatsapp", // Set a proper content description if required
-                                                    modifier = Modifier.size(40.dp, 40.dp)
+                                                    modifier = Modifier.clickable( onClick = {
+                                                        val phoneNumber = "955198135" // Replace with the recipient's phone number
+                                                        val message = "Hola! Puedes revisar nuestro proyecto en el siguiente link: https://github.com/Jannire/PM-Entrega01Grupal" // Replace with your message
+
+                                                        // Create an Intent to send a WhatsApp message
+                                                        val intent = Intent(Intent.ACTION_VIEW)
+                                                        intent.data = Uri.parse("https://api.whatsapp.com/send?phone=$phoneNumber&text=$message")
+
+                                                        // Start the activity with the intent
+                                                        sendMessage.launch(intent)
+                                                    })//
+                                                    .size(40.dp, 40.dp)
                                                 )
                                                 Box(
                                                     modifier = Modifier
@@ -178,7 +196,11 @@ class MainActivity : ComponentActivity() {
                                                 Image(
                                                     painter = painterGit,
                                                     contentDescription = "GitHub", // Set a proper content description if required
-                                                    modifier = Modifier.size(40.dp, 40.dp)
+                                                    modifier = Modifier.clickable( onClick = {
+                                                        val intent = Intent(Intent.ACTION_VIEW)
+                                                        intent.data = Uri.parse("https://github.com/Jannire/PM-Entrega01Grupal")
+                                                        sendMessage.launch(intent)
+                                                    }).size(40.dp, 40.dp)
                                                 )
                                                 Box(
                                                     modifier = Modifier
