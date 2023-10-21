@@ -285,7 +285,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "profile") {
                                     Log.d("ROUTER", "profile")
-                                    ProfileScreen(navController, profileScreenViewModel)
+                                    ProfileScreen(navController, LoginScreenViewModel(), profileScreenViewModel, 0)
                                 }
                                 composable(route = "login") {
                                     Log.d("ROUTER", "login")
@@ -300,7 +300,7 @@ class MainActivity : ComponentActivity() {
                                     ExerciseScreen(navController, exerciseScreenViewModel)
                                 }
 
-                                composable(route = "home?user_id={user_id}", arguments = listOf(
+                                composable(route = "login?user_id={user_id}", arguments = listOf(
                                     navArgument("user_id") {
                                         type = NavType.IntType
                                         defaultValue = 0
