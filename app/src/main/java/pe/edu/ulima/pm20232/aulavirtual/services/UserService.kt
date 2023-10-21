@@ -34,6 +34,7 @@ class UserService {
         userList.add(User(id = 26, user = "20162609", password = "123", memberId = 26))
         userList.add(User(id = 27, user = "20172768", password = "123", memberId = 27))
         userList.add(User(id = 28, user = "20183460", password = "123", memberId = 28))
+        userList.add(User(id = 29, user = "20193553", password = "123", memberId = 29))
     }
 
     fun checkUser(userName: String, password: String): Int{
