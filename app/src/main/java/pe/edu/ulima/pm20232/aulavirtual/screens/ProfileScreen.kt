@@ -1,11 +1,5 @@
 package pe.edu.ulima.pm20232.aulavirtual.screens
 
-import android.graphics.Bitmap
-import android.net.Uri
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,20 +8,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-<<<<<<< Updated upstream
 import androidx.compose.runtime.remember
-=======
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
->>>>>>> Stashed changes
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -35,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
@@ -54,12 +39,10 @@ import java.util.Objects.toString
 
 @Composable
 fun ImageView(url: String, height: Int, width: Int) {
-    val painter = rememberImagePainter(
-        data = url,
-        builder = {
-            // You can apply transformations here if needed
-            transformations(CircleCropTransformation())
-        })
+    val painter = rememberImagePainter(data = url, builder = {
+        // You can apply transformations here if needed
+        transformations(CircleCropTransformation())
+    })
     Image(
         painter = painter,
         contentDescription = null, // Set a proper content description if required
@@ -69,11 +52,7 @@ fun ImageView(url: String, height: Int, width: Int) {
 }
 
 @Composable
-<<<<<<< Updated upstream
 fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController: NavController) {
-=======
-fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController:NavController) {
->>>>>>> Stashed changes
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,16 +66,8 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController:NavController)
             modifier = Modifier
                 .size(40.dp)
                 .padding(start = (screenWidthDp * 0.05).dp)
-<<<<<<< Updated upstream
                 .clickable { navController.navigate("home") },
-=======
-                .clickable {
-                    println("Ir a home")
-                    navController.navigate("home")
-                },
->>>>>>> Stashed changes
             colorFilter = ColorFilter.tint(Color.Gray),
-
         )
         Spacer(modifier = Modifier.weight(1f)) // Add a Spacer with weight
         Image(
@@ -108,7 +79,7 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController:NavController)
             colorFilter = ColorFilter.tint(Color.Gray),
         )
     }
-} // // SCREEN: 8%
+}
 
 @Composable
 fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: Int) {
@@ -177,8 +148,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
             )
         }
     }
-} // SCREEN: 20%
-
+}
 @Composable
 fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, user: Int) {
 
@@ -242,7 +212,7 @@ fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, user: Int) {
 }
 
 @Composable
-fun BtnData(screenHeightDp: Int, screenWidthDp: Int) {
+fun BtnData(screenHeightDp: Int, screenWidthDp: Int){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -262,10 +232,7 @@ fun BtnData(screenHeightDp: Int, screenWidthDp: Int) {
                     .width((screenWidthDp * 0.75).dp)
                     .background(Orange400)
             ) {
-                Text(
-                    text = "Actualizar Datos",
-                    color = (if (isSystemInDarkTheme()) Color.White else Color.Black)
-                ) // Set text color to white
+                Text(text = "Actualizar Datos", color = (if (isSystemInDarkTheme()) Color.White else Color.Black)) // Set text color to white
             }
             Spacer(modifier = Modifier.weight(2f))
 
@@ -274,11 +241,7 @@ fun BtnData(screenHeightDp: Int, screenWidthDp: Int) {
 }
 
 @Composable
-<<<<<<< Updated upstream
 fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int, navController: NavController){
-=======
-fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int) {
->>>>>>> Stashed changes
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -299,10 +262,7 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int) {
                     .width((screenWidthDp * 0.75).dp)
                     .background(Orange400),
             ) {
-                Text(
-                    text = "Cerrar Sesión",
-                    color = (if (isSystemInDarkTheme()) Color.White else Color.Black)
-                ) // Set text color to white
+                Text(text = "Cerrar Sesión", color = (if (isSystemInDarkTheme()) Color.White else Color.Black)) // Set text color to white
             }
             Spacer(modifier = Modifier.weight(2f))
         }
@@ -310,7 +270,6 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int) {
 }
 
 @Composable
-<<<<<<< Updated upstream
 fun FinalScreen(
     screenHeightDp: Int,
     screenWidthDp: Int,
@@ -320,12 +279,6 @@ fun FinalScreen(
     userId: Int) {
 
     val user = loginModel.user
-=======
-fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, navController: NavController) {
-    val imageUrl =
-        "https://wallpapers.com/images/hd/cute-cat-eyes-profile-picture-uq3edzmg1guze2hh.jpg"
-
->>>>>>> Stashed changes
 
     Column(
         modifier = Modifier
@@ -333,20 +286,14 @@ fun FinalScreen(screenHeightDp: Int, screenWidthDp: Int, navController: NavContr
             .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Background color, changes in dark mode
     ) {
         TopBar(screenHeightDp, screenWidthDp, navController)
-<<<<<<< Updated upstream
         UserCard(screenHeightDp, screenWidthDp, imageUrl, userId)
         ContactInfo(screenHeightDp, screenWidthDp, userId)
-=======
-        UserCard(screenHeightDp, screenWidthDp, imageUrl)
-        ContactInfo(screenHeightDp, screenWidthDp)
->>>>>>> Stashed changes
         BtnData(screenHeightDp, screenWidthDp)
         BtnLogOut(screenHeightDp, screenWidthDp, navController)
     }
 }
 
 @Composable
-<<<<<<< Updated upstream
 fun ProfileScreen(navController: NavController, loginModel: LoginScreenViewModel, viewModel: ProfileScreenViewModel, userId: Int) {
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
@@ -367,14 +314,6 @@ fun ProfileScreen(navController: NavController, loginModel: LoginScreenViewModel
 
 
 
-=======
-fun ProfileScreen(navController: NavController, model: ProfileScreenViewModel) {
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp
-    val screenHeightDp = configuration.screenHeightDp
-
-    FinalScreen(screenHeightDp, screenWidthDp, navController)
->>>>>>> Stashed changes
 
 
 }
