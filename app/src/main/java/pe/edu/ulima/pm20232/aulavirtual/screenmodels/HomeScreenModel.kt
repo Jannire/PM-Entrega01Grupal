@@ -54,10 +54,19 @@ class HomeScreenViewModel: ViewModel(){
         setExercises(filteredExercises)
     }
 
-    fun filterByBodyParts(bodyPartId: Int){
+    fun filterByBodyParts(userId: Int, bodyPartId: Int) {
+        val exerciseMembers = ExerciseMemberService().exerciseMemberList
         val service: ExerciseService = ExerciseService()
-        val list = service.exerciseListByBodyPartId(bodyPartId)
-        setExercises(list)
+
+        val assignedExercises = exerciseMembers
+            .filter { it.memberId == userId }
+            .map { it.exerciseId }
+
+        val filteredExercises = service
+            .listAll()
+            .filter { assignedExercises.contains(it.id) && it.bodyPartId == bodyPartId }
+
+        setExercises(filteredExercises)
     }
     fun countAssignedExercises(userId: Int): Pair<Int, Int> {
         val exerciseMembers = ExerciseMemberService().exerciseMemberList

@@ -41,7 +41,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import pe.edu.ulima.pm20232.aulavirtual.R
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.HomeScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray1200
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
@@ -67,19 +66,23 @@ fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, user
     var intValue by remember { mutableStateOf(0) }
     val exercises by model.exercises.collectAsState()
     var selectedExerciseIndex by remember { mutableStateOf(-1) }
+    val showDialog = remember { mutableStateOf(false) }
+    val currentExercise = if (selectedExerciseIndex != -1) exercises[selectedExerciseIndex] else null
+    val exerciseMember = if (currentExercise != null) model.getExerciseMemberForUser(userId, currentExercise.id) else null
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3) // Specify the number of columns
+        cells = GridCells.Fixed(3)
     ) {
         items(exercises.size) { i ->
             Column() {
                 println(exercises[i].imageUrl)
                 Box(
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(80.dp) // Reduced the size of the cells' images
                         .padding(bottom = 10.dp)
                         .clickable {
                             selectedExerciseIndex = i
+                            showDialog.value = true
                         }
                 ) {
                     Image(
@@ -88,37 +91,125 @@ fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, user
                     )
                 }
                 Text(exercises[i].name)
-                if (selectedExerciseIndex == i) {
-                    val exerciseMember = model.getExerciseMemberForUser(userId, exercises[i].id)
-                    if (exerciseMember != null) {
-                        ExerciseDetailsMarkdown(exercises[i], exerciseMember)
-                    }
-                }
             }
         }
     }
+
+    if (currentExercise != null && exerciseMember != null) {
+        ShowDialog(showDialog, currentExercise, exerciseMember)
+    }
 }
-//generar markdown por click de bloque
+
 @Composable
-fun ExerciseDetailsMarkdown(exercise: Exercise, exerciseMember: ExerciseMember) {
-    val reps = exerciseMember.reps
-    val sets = exerciseMember.sets
-    val markdownText = buildString {
-        appendLine("${exercise.name}")
-        appendLine("${reps} ____ ${sets}")
-        appendLine("repeticiones ____ sets")
-        appendLine("Description")
-        appendLine(exercise.description)
-        appendLine("Video URL")
-        appendLine(exercise.videoUrl)
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        MarkDown(text = markdownText, modifier = Modifier.fillMaxSize())
+fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise, exerciseMember: ExerciseMember) {
+    if (showDialog.value) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            androidx.compose.material.AlertDialog(
+                onDismissRequest = {
+                    showDialog.value = false
+                },
+                title = {
+                    Text(
+                        text = exercise.name,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp)
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Repetitions",
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = "Sets",
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = exerciseMember.reps.toString(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = exerciseMember.sets.toString(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+                        }
+                        Text(
+                            text = "Description: ${exercise.description}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, bottom = 8.dp),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = "Video URL: ${exercise.videoUrl}",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { showDialog.value = false },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        content = {
+                            Text(
+                                text = "OK",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    )
+                },
+                backgroundColor = Color.LightGray,
+                modifier = Modifier.align(Alignment.Center)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+            )
+        }
     }
 }
+
+
 
 @Composable
 fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel, userId: Int) {
@@ -126,15 +217,13 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
 
-    // Receive user id
     val (assignedExerciseCount, trainedBodyPartsCount) = remember {
-        model.countAssignedExercises(userId) // Use a default value in case userId is null
+        model.countAssignedExercises(userId)
     }
 
     model.getBodyParts()
 
     if (userId != null) {
-        // Receive the user id
         model.listAssignedExercises(userId)
     } else {
         model.listAllExercises()
@@ -146,14 +235,14 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
             .padding(20.dp)
     ) {
         Activities(assignedExerciseCount, trainedBodyPartsCount, screenWidthDp, screenHeightDp)
-        SelectOptions(model)
+        SelectOptions(model,userId)
         ExercisesGrid(navController, model, userId)
     }
 }
 
 
 @Composable
-fun SelectOptions(model: HomeScreenViewModel) {
+fun SelectOptions(model: HomeScreenViewModel, userId: Int) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
@@ -172,7 +261,7 @@ fun SelectOptions(model: HomeScreenViewModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
-                    //This value is used to assign to the DropDown the same width
+                    // This value is used to assign to the DropDown the same width
                     textfieldSize = coordinates.size.toSize()
                 },
             label = { Text("Lista de Partes del Cuerpo") },
@@ -181,32 +270,36 @@ fun SelectOptions(model: HomeScreenViewModel) {
                     Modifier.clickable { expanded = !expanded })
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                disabledLabelColor = Color.Black, // Change the label color when disabled
-                disabledBorderColor = Gray1200, // Change the border color when disabled
+                disabledLabelColor = Color.Black,
+                disabledBorderColor = Gray1200,
                 disabledTextColor = Color.Black
-            )
-        )
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .width(with(LocalDensity.current){textfieldSize.width.toDp()})
-        ) {
-            for ((key, value) in model.bodyPartsMap) {
-                DropdownMenuItem(onClick = {
-                    model.filterByBodyParts(key)
-                    selectedText = value
-                    expanded = false
-                    println()
-                })
-                {
-                    Text(text = value,
-                        color = Color.Black)
-                }
+            ))
+    }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        modifier = Modifier
+            .width(with(LocalDensity.current) { textfieldSize.width.toDp() })
+    ) {
+        DropdownMenuItem(onClick = {
+            selectedText = ""
+            expanded = false
+            model.listAssignedExercises(userId) // Unfilter the grid
+        }) {
+            Text("Quitar Filtro", color = Color.Black)
+        }
+        for ((key, value) in model.bodyPartsMap) {
+            DropdownMenuItem(onClick = {
+                selectedText = value
+                expanded = false
+                model.filterByBodyParts(userId, key) // Call the filterByBodyParts function here
+            }) {
+                Text(text = value, color = Color.Black)
             }
         }
     }
 }
+
 
 @Composable
 fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWidthDp: Int, screenHeightDp: Int) {
@@ -271,11 +364,5 @@ fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWid
                 )
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.linea),
-            contentDescription = "linea",
-            modifier = Modifier.width(screenWidthDp.dp),
-            colorFilter = ColorFilter.tint(Orange400)
-        )
     }
 }
