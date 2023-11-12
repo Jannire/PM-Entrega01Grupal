@@ -281,7 +281,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "reset_password") {
                                     Log.d("ROUTER", "reset password")
-                                    ResetPasswordScreen(navController, resetScreenViewModel)
+                                    ResetPasswordScreen(resetScreenViewModel, navController)
                                 }
                                 composable(route = "profile") {
                                     Log.d("ROUTER", "profile")

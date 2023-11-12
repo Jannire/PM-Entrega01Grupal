@@ -170,9 +170,9 @@ fun ResetPassForm(
                TextFieldWithLeadingIcon(
                   leadingIcon = Icons.Default.AccountBox, // Replace with your desired icon
                   placeholder = "DNI",
-                  text = viewModel.user,
+                  text = viewModel.dni,
                   onTextChanged = {
-                     viewModel.user = it
+                     viewModel.dni = it
                   }
                )
                TextFieldWithLeadingIcon(
@@ -190,7 +190,7 @@ fun ResetPassForm(
                   horizontalArrangement = Arrangement.Center,
                ){
                   ButtonWithIcon("ENVIAR CORREO", Icons.Default.Email, {
-                     viewModel.access()
+                     viewModel.resetPass()
                   })
                }
             }
@@ -248,7 +248,7 @@ fun Reset(){
 }
 
 @Composable
-fun ResetPasswordScreen(navController: NavHostController, viewModel: ResetPasswordViewModel) {
+fun ResetPasswordScreen(viewModel: ResetPasswordViewModel, navController: NavHostController) {
    val configuration = LocalConfiguration.current
    val screenWidthDp = configuration.screenWidthDp
    val screenHeightDp = configuration.screenHeightDp
