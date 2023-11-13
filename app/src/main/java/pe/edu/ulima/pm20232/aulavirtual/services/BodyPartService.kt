@@ -23,3 +23,7 @@ class BodyPartService {
         bodyPartList.add(BodyPart(id = 8, name = "TRICEPS"))
     }
 }
+interface BodyPartService2 {
+    @GET("body_part/list")
+    fun getBodyPartList(): Call<BodyPart>
+}
