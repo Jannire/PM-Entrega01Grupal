@@ -35,7 +35,6 @@ class LoginScreenViewModel(private val context: Context): ViewModel() {
             try {
                 withContext(Dispatchers.IO) {
                     val response = userService.findOne(user, password)?.execute()
-                    //println("RESPUESTA : $response")
                     if (response != null) {
                         if (response.body()!!.success) {
                             val responseData = response.body()!!

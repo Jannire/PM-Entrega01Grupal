@@ -305,7 +305,8 @@ class MainActivity : ComponentActivity() {
                                 ), content = { entry ->
                                     val memberId = entry.arguments?.getInt("member_id")!!
                                     val userId = entry.arguments?.getInt("user_id")!!
-
+                                    homeScreenViewModel.memberId = memberId;
+                                    homeScreenViewModel.userId = userId;
                                     HomeScreen(navController, loginScreenViewModel, homeScreenViewModel, userId)
                                 })
                                 composable(route = "login") {

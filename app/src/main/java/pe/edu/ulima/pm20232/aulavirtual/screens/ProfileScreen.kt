@@ -29,6 +29,7 @@ import pe.edu.ulima.pm20232.aulavirtual.models.Member
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.services.MemberService
+import pe.edu.ulima.pm20232.aulavirtual.services.MemberServiceAntiguoELIMINAR
 import pe.edu.ulima.pm20232.aulavirtual.services.UserService
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
@@ -84,8 +85,8 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController: NavController
 @Composable
 fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: Int) {
 
-    val memberService: MemberService = MemberService()
 
+    val memberService: MemberServiceAntiguoELIMINAR = MemberServiceAntiguoELIMINAR()
     val lname = toString(memberService.getMemberLastNames(user))
     val name = toString(memberService.getMemberNames(user))
     val dni = toString(memberService.getMemberDni(user))
@@ -152,7 +153,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
 @Composable
 fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, user: Int) {
 
-    val memberService: MemberService = MemberService()
+    val memberService: MemberServiceAntiguoELIMINAR = MemberServiceAntiguoELIMINAR()
 
     val telefono = memberService.getMemberPhoneByCode(user)
     var email = memberService.getMemberEmailByCode(user)

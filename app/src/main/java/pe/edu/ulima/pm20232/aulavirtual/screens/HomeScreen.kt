@@ -58,6 +58,7 @@ import pe.edu.ulima.pm20232.aulavirtual.services.UserService
 import java.net.URL
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -217,9 +218,12 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
 
-    val (assignedExerciseCount, trainedBodyPartsCount) = remember {
-        model.countAssignedExercises(userId)
-    }
+    var assignedExerciseCount = 0 //mutableStateOf(0);
+    var trainedBodyPartsCount = 0 //mutableStateOf(0);
+    var temp = model.fetchBodyPartsExercises()
+
+    assignedExerciseCount = temp.first
+    trainedBodyPartsCount = temp.second
 
     model.getBodyParts()
 
