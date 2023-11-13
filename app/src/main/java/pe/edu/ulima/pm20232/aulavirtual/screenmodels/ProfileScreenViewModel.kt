@@ -58,14 +58,15 @@ class ProfileScreenViewModel: ViewModel() {
     fun load(user: Int){
         coroutine.launch {
             try {
-                val response = memberService.profile(user)?.execute()
-                if (response != null) {
-                    lname = response.body()!!.last_names
-                    name = response.body()!!.names
-                    phone = response.body()!!.phone
-                    email = response.body()!!.email
-                    level = response.body()!!.level_name
-                    //img = response.body()!!.imageUrl
+                withContext(Dispatchers.IO) {
+                    val response = memberService.profile(user)?.execute()
+                    if (response != null) {
+                        lname = response.body()!!.last_names
+                        name = response.body()!!.names
+                        phone = response.body()!!.phone
+                        email = response.body()!!.email
+                        level = response.body()!!.level_name
+                        //img = response.body()!!.imageUrl
 
                     println("RESPUESTA : " + response.body())
 
