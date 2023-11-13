@@ -60,6 +60,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
+import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -264,7 +265,7 @@ fun SelectOptions(model: HomeScreenViewModel, userId: Int) {
                 expanded = false
                 model.filterByBodyParts(userId, part.id) // Call the filterByBodyParts function here
             }) {
-                Text(text = part.name, color = Color.Black)
+                Text(text = part.name, color = (if (isSystemInDarkTheme()) White400 else Gray800))
             }
         }
     }
