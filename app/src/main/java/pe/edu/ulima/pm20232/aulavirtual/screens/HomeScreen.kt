@@ -372,3 +372,23 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
         ExercisesGrid(navController, model, userId)
     }
 }
+@Composable
+fun ExerciseDetailsScreen(exerciseMember: ExerciseMember) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(text = "Repetitions: ${exerciseMember.reps}")
+            Text(text = "Sets: ${exerciseMember.sets}")
+
+
+
+        }
+    }
+}
