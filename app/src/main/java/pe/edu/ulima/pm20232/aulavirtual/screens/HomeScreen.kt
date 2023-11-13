@@ -373,22 +373,29 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     }
 }
 @Composable
-fun ExerciseDetailsScreen(exerciseMember: ExerciseMember) {
+fun ExerciseDetailsScreen(userId: Int, exerciseId: Int) {
+    val exerciseMember = remember {
+        HomeScreenViewModel().getAssignedExerciseDetails(userId, exerciseId)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Text(text = "Repetitions: ${exerciseMember.reps}")
-            Text(text = "Sets: ${exerciseMember.sets}")
+        if (exerciseMember != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Text(text = "Repetitions: ${exerciseMember.reps}")
+                Text(text = "Sets: ${exerciseMember.sets}")
 
-
-
+            }
+        } else {
+            // Manejo de caso en el que no se encontraron detalles del ejercicio asignado
+            Text(text = "Detalles no encontrados")
         }
     }
 }
