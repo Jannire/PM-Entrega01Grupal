@@ -70,33 +70,24 @@ class HomeScreenViewModel: ViewModel(){
     }
     fun countAssignedExercises(userId: Int): Pair<Int, Int> {
         val exerciseMembers = ExerciseMemberService().exerciseMemberList
+        val exercises = ExerciseService().listAll()
         val bodyParts = BodyPartService().bodyPartList
 
         var assignedExerciseCount = 0
-        val trainedBodyParts = mutableSetOf<String>()
+        val uniqueBodyPartIds = mutableSetOf<Int>()
 
-        //conteo de ejercicios empleados por el miembro
         for (exerciseMember in exerciseMembers) {
-            //verifica id miemmrbo de EMS con el parametro recibido osea USER ID
             if (exerciseMember.memberId == userId) {
                 assignedExerciseCount++
-                println(userId)
-                println("Exercise assigned: " + exerciseMember.id)
-                println("Cantidad de ejercicios: $assignedExerciseCount")
-
-                // separar partes entrenadas por el usuario
-                //Busca en el servicio de bodyparts si existe una instancia de id cuerpo con id parte objetivo
-                val matchedExercise = bodyParts.find { it.id == exerciseMember.exerciseId }
-                //verifica si ya existe en la lista para evitar repeticiones
-                if (matchedExercise != null && !trainedBodyParts.contains(matchedExercise.name)) {
-                    trainedBodyParts.add(matchedExercise.name)
-                    println("Parte del cuerpo entrenada: ${matchedExercise.name}")
+                val matchedExercise = exercises.find { it.id == exerciseMember.exerciseId }
+                val bodyPartId = matchedExercise?.bodyPartId
+                if (bodyPartId != null && uniqueBodyPartIds.add(bodyPartId)) {
                 }
             }
         }
-        return Pair(assignedExerciseCount, trainedBodyParts.size)
-    }
 
+        return Pair(assignedExerciseCount, uniqueBodyPartIds.size)
+    }
     fun getExerciseMemberForUser(userId: Int, id: Int): ExerciseMember? {
         return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == id }
     }

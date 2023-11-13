@@ -300,7 +300,7 @@ class MainActivity : ComponentActivity() {
                                     ExerciseScreen(navController, exerciseScreenViewModel)
                                 }
 
-                                composable(route = "login?user_id={user_id}", arguments = listOf(
+                                composable(route = "home?user_id={user_id}", arguments = listOf(
                                     navArgument("user_id") {
                                         type = NavType.IntType
                                         defaultValue = 0
@@ -308,7 +308,8 @@ class MainActivity : ComponentActivity() {
                                 ), content = { entry ->
                                     val user_id = entry.arguments?.getInt("user_id")!!
                                     HomeScreen(navController, LoginScreenViewModel(), homeScreenViewModel, user_id);
-                                    })
+                                })
+
 
                                 // Cambiar rutas para el detalle de cada ejercicio:
                                 /*
