@@ -4,7 +4,8 @@ import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 
 class BodyPartService {
     var bodyPartList: ArrayList<BodyPart> = ArrayList<BodyPart>()
-    constructor() {
+
+    constructor(){
         bodyPartList.add(BodyPart(id = 1, name = "ABDOMEN"))
         bodyPartList.add(BodyPart(id = 2, name = "PIERNAS"))
         bodyPartList.add(BodyPart(id = 3, name = "PANTORRILLA"))

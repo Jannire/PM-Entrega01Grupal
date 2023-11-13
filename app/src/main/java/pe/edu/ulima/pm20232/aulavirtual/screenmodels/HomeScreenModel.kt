@@ -2,47 +2,85 @@ package pe.edu.ulima.pm20232.aulavirtual.screenmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pe.edu.ulima.pm20232.aulavirtual.configs.BackendClient
-import pe.edu.ulima.pm20232.aulavirtual.configs.HttpStdResponse
 import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 import pe.edu.ulima.pm20232.aulavirtual.models.ExerciseMember
 import pe.edu.ulima.pm20232.aulavirtual.models.responses.BodyPartExercisesCount
-import pe.edu.ulima.pm20232.aulavirtual.services.BodyPartService
+import pe.edu.ulima.pm20232.aulavirtual.models.responses.BodyParts
+import pe.edu.ulima.pm20232.aulavirtual.services.BodyPartServiceInterface
 import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseService
 import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseMemberService
 import pe.edu.ulima.pm20232.aulavirtual.services.MemberService
-import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-
-import kotlin.math.log
 
 class HomeScreenViewModel: ViewModel(){
     val bodyPartsMap = mutableMapOf<Int, String>()
     private val coroutine: CoroutineScope = viewModelScope
     private val memberService = BackendClient.buildService(MemberService::class.java)
+    private val bodyPartServiceInterface = BackendClient.buildService(BodyPartServiceInterface::class.java)
 
     var userId: Int by mutableStateOf(0)
     var memberId: Int by mutableStateOf(0)
     var bodyPartsCount: Int by mutableStateOf(0)
     var exercisesCount: Int by mutableStateOf(0)
-    val bodyPartMap = mutableMapOf<Int, String>()
-    val bodyPartFlow = MutableStateFlow(bodyPartMap.toMap())
+    val bodyPartdp = mutableListOf<BodyPart>()
+
+    //var bodyPartdp: List<BodyPart> by mutableStateOf(listOf())
+    //val bodyPartMap = mutableMapOf<Int, String>()
+    //val bodyPartFlow = MutableStateFlow(bodyPartMap.toMap())
+
 
     private var _exercises = MutableStateFlow<List<Exercise>>(emptyList())
 
-    fun getBodyParts(){
+    fun fetchBodyParts()
+    {
+
+        //var bodyPartdp: List<BodyPart> = listOf<BodyPart>();
+        var res: List<BodyPart> = listOf<BodyPart>();
+        coroutine.async {
+            try {
+                withContext(Dispatchers.IO)
+                {
+                    val response = bodyPartServiceInterface.BodyParts(memberId).execute()
+                    bodyPartdp.clear()
+                    println("RESPONSE DP: $response")
+                    if (response.isSuccessful) {
+                        res = response.body()!!
+                        println("RESPONSE SUCCESS DP: $res")
+                        for(par: BodyPart in res)
+                        {
+                            val partId = par.id
+                            val partName = par.name
+                            var tem = BodyPart(partId, partName)
+                            bodyPartdp.add(tem)
+                        }
+                        //bodyPartdp = res;
+
+
+                    } else {
+                        // Maneja errores
+                        ;
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+
+            }
+        }
+    }
+/*    fun getBodyParts(){
         val bodyPartService: BodyPartService = BodyPartService()
         var bodyPartList: ArrayList<BodyPart> = bodyPartService.bodyPartList
         for(p: BodyPart in bodyPartList){
@@ -52,7 +90,7 @@ class HomeScreenViewModel: ViewModel(){
                 bodyPartsMap[id] = name
             }
         }
-    }
+    }*/
 
     val exercises: StateFlow<List<Exercise>> get() = _exercises
     fun setExercises(newItems: List<Exercise>) {
@@ -116,10 +154,10 @@ class HomeScreenViewModel: ViewModel(){
         return Pair(bodyPartsCount, exercisesCount)
     }
 
-    fun countAssignedExercises(userId: Int): Pair<Int, Int> {
+    /*fun countAssignedExercises(userId: Int): Pair<Int, Int> {
         val exerciseMembers = ExerciseMemberService().exerciseMemberList
         val exercises = ExerciseService().listAll()
-        val bodyParts = BodyPartService().bodyPartList
+        //val bodyParts = BodyPartService().bodyPartList
 
         var assignedExerciseCount = 0
         val uniqueBodyPartIds = mutableSetOf<Int>()
@@ -135,7 +173,7 @@ class HomeScreenViewModel: ViewModel(){
         }
 
         return Pair(assignedExerciseCount, uniqueBodyPartIds.size)
-    }
+    }*/
     fun getExerciseMemberForUser(userId: Int, id: Int): ExerciseMember? {
         return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == id }
     }
