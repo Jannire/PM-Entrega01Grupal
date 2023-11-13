@@ -64,14 +64,20 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
+import pe.edu.ulima.pm20232.aulavirtual.factories.LoginScreenViewModelFactory
+import pe.edu.ulima.pm20232.aulavirtual.configs.PreferencesManager
 
 class MainActivity : ComponentActivity() {
-    private val loginScreenViewModel by viewModels<LoginScreenViewModel>()
+    private lateinit var preferencesManager: PreferencesManager
+    private val loginScreenViewModel: LoginScreenViewModel by viewModels {
+        LoginScreenViewModelFactory(applicationContext)
+    }
     private val profileScreenViewModel by viewModels<ProfileScreenViewModel>()
     private val homeScreenViewModel by viewModels<HomeScreenViewModel>()
     private val resetScreenViewModel by viewModels<ResetPasswordViewModel>()
     private val createAccountViewModel by viewModels<CreateAccountViewModel>()
     private val exerciseScreenViewModel by viewModels<ExerciseScreenViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -277,7 +283,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "home") {
                                     Log.d("HOME", "home screen")
-                                    HomeScreen(navController,LoginScreenViewModel(), homeScreenViewModel,0)
+                                    HomeScreen(navController, loginScreenViewModel, homeScreenViewModel, 0);
                                 }
                                 composable(route = "reset_password") {
                                     Log.d("ROUTER", "reset password")
@@ -285,8 +291,23 @@ class MainActivity : ComponentActivity() {
                                 }
                                 composable(route = "profile") {
                                     Log.d("ROUTER", "profile")
-                                    ProfileScreen(navController, LoginScreenViewModel(), profileScreenViewModel, 0)
+                                    ProfileScreen(navController, loginScreenViewModel, profileScreenViewModel, 0)
                                 }
+                                composable(route = "routine?user_id={user_id}&member_id={member_id}", arguments = listOf(
+                                    navArgument("user_id") {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    },
+                                    navArgument("member_id") {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    }
+                                ), content = { entry ->
+                                    val memberId = entry.arguments?.getInt("member_id")!!
+                                    val userId = entry.arguments?.getInt("user_id")!!
+
+                                    HomeScreen(navController, loginScreenViewModel, homeScreenViewModel, userId)
+                                })
                                 composable(route = "login") {
                                     Log.d("ROUTER", "login")
                                     LoginScreen(loginScreenViewModel, navController)
@@ -307,7 +328,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 ), content = { entry ->
                                     val user_id = entry.arguments?.getInt("user_id")!!
-                                    HomeScreen(navController, LoginScreenViewModel(), homeScreenViewModel, user_id);
+                                    HomeScreen(navController, loginScreenViewModel, homeScreenViewModel, user_id);
                                     })
 
                                 // Cambiar rutas para el detalle de cada ejercicio:
