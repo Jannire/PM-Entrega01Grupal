@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -147,7 +148,8 @@ fun CreateAccountForm(
             .fillMaxSize()
             .padding(top = (screenHeightDp * 0.30).dp)
     ) {
-        Box(modifier = Modifier.padding(
+        Box(modifier = Modifier
+            .padding(
             start = (screenWidthDp * 0.125).dp,
             top = (40.dp)
         ),){
@@ -155,32 +157,33 @@ fun CreateAccountForm(
                 modifier = Modifier
                     .size(
                         (screenWidthDp * 0.75).dp,
-                        (screenHeightDp * 0.75).dp
+                        (screenHeightDp * 0.60).dp
                     ) // Adjust the size as needed
                     //.border(1.dp, Gray800)
                     .background((if (isSystemInDarkTheme()) Color.DarkGray else White400))
                     .border(1.dp, Gray400) // Se cambio el borde del Login Form según la interface.
-                    .padding(start = 20.dp, top = 30.dp, bottom = 20.dp, end = 20.dp)
+                        .padding(start = 40.dp, top = 30.dp, bottom = 20.dp, end = 40.dp)
             ) {
                 Column(
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ){
-                    Text(text ="CREAR CUENTA", fontWeight = FontWeight.Medium, fontSize = 13.sp)
+                    Text(text ="CREAR CUENTA", fontWeight = FontWeight.Medium, fontSize = 12.sp)
                     TextFieldWithLeadingIcon(
                         leadingIcon = Icons.Default.Person, // Replace with your desired icon
-                        placeholder = "NOMBRES",
+                        placeholder = "Nombres",
                         text = viewModel.nombre,
                         onTextChanged = {
-                            viewModel.nombre = it
+                            viewModel.nombre = it.take(25)
                         }
                     )
                     TextFieldWithLeadingIcon(
                         leadingIcon = Icons.Default.Person,
-                        placeholder = "APELLIDOS",
+                        placeholder = "Apellidos",
                         text = viewModel.apellido,
                         onTextChanged = {
-                            viewModel.apellido = it
+                            viewModel.apellido = it.take(25)
                         }
                     )
                     TextFieldWithLeadingIcon(
@@ -188,7 +191,7 @@ fun CreateAccountForm(
                         placeholder = "DNI",
                         text = viewModel.dni,
                         onTextChanged = {
-                            viewModel.dni = it
+                            viewModel.dni = it.take(8).filter { char -> char.isDigit() }
                         }
                     )
                     TextFieldWithLeadingIcon(
@@ -196,17 +199,34 @@ fun CreateAccountForm(
                         text = viewModel.correo,
                         placeholder = "Correo",
                         onTextChanged = {
-                            viewModel.correo = it
+                            viewModel.correo = it.take(25)
+                        }
+                    )
+                    TextFieldWithLeadingIcon(
+                        leadingIcon = Icons.Default.Call, // Replace with your desired icon
+                        placeholder = "Telefono",
+                        text = viewModel.telefono,
+                        onTextChanged = {
+                            viewModel.telefono = it.take(9).filter { char -> char.isDigit() }
+                        }
+                    )
+                    TextFieldWithLeadingIcon(
+                        leadingIcon = Icons.Default.Star,
+                        placeholder = "Contraseña",
+                        text = viewModel.contrasena,
+                        onTextChanged = {
+                            viewModel.contrasena = it.take(25)
                         },
                         isPassword = true,
                     )
                     TextFieldWithLeadingIcon(
-                        leadingIcon = Icons.Default.Call, // Replace with your desired icon
-                        placeholder = "TELEFONO",
-                        text = viewModel.telefono,
+                        leadingIcon = Icons.Default.Star,
+                        placeholder = "Repetir Contraseña",
+                        text = viewModel.repContrasena,
                         onTextChanged = {
-                            viewModel.telefono = it
-                        }
+                            viewModel.repContrasena = it.take(25)
+                        },
+                        isPassword = true,
                     )
                     Row(
                         modifier = Modifier
@@ -259,7 +279,6 @@ fun CreateAccountScreen(viewModel: CreateAccountViewModel, navController: NavHos
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
     TS()
-
     BSheet(screenWidthDp, screenHeightDp, viewModel)
     TB(screenHeightDp, screenWidthDp, navController)
     if(viewModel.bottomSheetCollapse){

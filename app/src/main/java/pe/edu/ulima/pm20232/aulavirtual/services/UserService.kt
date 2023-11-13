@@ -36,4 +36,10 @@ interface UserService2 {
         @Field("dni") name: String?,
         @Field("email") age: String?
     ): Call<HttpStdResponse?>?
+    @FormUrlEncoded
+    @POST("user/create")
+    fun createAccount(
+        @Field("dni") name: String?,
+        @Field("email") email: String?
+    ): Call<HttpStdResponse?>?
 }

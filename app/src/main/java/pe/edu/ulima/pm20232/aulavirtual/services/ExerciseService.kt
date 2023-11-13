@@ -2,7 +2,12 @@ package pe.edu.ulima.pm20232.aulavirtual.services
 
 
 import pe.edu.ulima.pm20232.aulavirtual.configs.BASE_URL
+import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
+import pe.edu.ulima.pm20232.aulavirtual.models.responses.ExerciseSetReps
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 class ExerciseService {
     var exerciseList: ArrayList<Exercise> = ArrayList<Exercise>()
@@ -79,4 +84,15 @@ class ExerciseService {
         }
         return reducedList
     }
+}
+
+interface ExerciseService2 {
+    @GET("exercise/list") // Reemplaza con la URL de tu punto final
+    fun bodyList(
+        @Query("body_part_id") bodyPartId: Int? = null,
+    ): Call<List<BodyPart>>
+    @GET("exercise/find") // Reemplaza con la URL de tu punto final
+    fun exercise(
+        @Query("exercise_id") exerciseId: Int? = null,
+    ): Call<Exercise>
 }
