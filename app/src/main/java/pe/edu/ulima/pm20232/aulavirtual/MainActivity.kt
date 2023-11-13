@@ -322,7 +322,7 @@ class MainActivity : ComponentActivity() {
                                     ExerciseScreen(navController, exerciseScreenViewModel)
                                 }
 
-                                composable(route = "login?user_id={user_id}", arguments = listOf(
+                                composable(route = "home?user_id={user_id}", arguments = listOf(
                                     navArgument("user_id") {
                                         type = NavType.IntType
                                         defaultValue = 0
