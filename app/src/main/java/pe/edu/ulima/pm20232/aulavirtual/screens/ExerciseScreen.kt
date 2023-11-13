@@ -20,30 +20,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
-import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
+import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
+import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ExerciseScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray1200
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.TextAlign
-import coil.annotation.ExperimentalCoilApi
-import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalCoilApi::class)
 @Composable
-fun ExercisesGrid(navController: NavController, model: ExerciseScreenViewModel) {
+fun ExercisesGrid(navController: NavController, model: ExerciseScreenViewModel,reslist: List<String>) {
     var showDialog by remember { mutableStateOf(false) }
     var selectedExercise by remember { mutableStateOf(Exercise(0, "", "", "", "", 0)) }
 
@@ -75,12 +72,14 @@ fun ExercisesGrid(navController: NavController, model: ExerciseScreenViewModel) 
     ShowDialog(
         showDialog = mutableStateOf(showDialog),
         exercise = selectedExercise,
+        reslist = reslist
     )
 }
 
 @Composable
-fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
+fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise, reslist: List<String>) {
     var dialogClosed by remember { mutableStateOf(false) }
+    println("mi nombre: " + reslist)
 
     if (showDialog.value && !dialogClosed) {
         Box(
@@ -91,11 +90,10 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
                 onDismissRequest = {
                     // Esta es la acción de descartar el diálogo, asegúrate de manejarla correctamente
                     showDialog.value = false
-                    dialogClosed = true
                 },
                 title = {
                     Text(
-                        text = exercise.name,
+                        text = "Nombre",
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -109,14 +107,14 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Description: ${exercise.description}",
+                            text = "Description: ",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 8.dp, bottom = 8.dp),
                             textAlign = TextAlign.Center
                         )
                         Text(
-                            text = "Video URL: ${exercise.videoUrl}",
+                            text = "Video URL: $",
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -127,7 +125,6 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
                         onClick = {
                             // Esta es la acción del botón OK, también puedes manejarla según sea necesario
                             showDialog.value = false
-                            dialogClosed = true
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,8 +147,7 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
                     .background(Color.Black.copy(alpha = 0.5f))
                     .clickable {
                         // También puedes cerrar el diálogo si se hace clic fuera de él
-                        showDialog.value = false
-                        dialogClosed = true
+                        showDialog.value = true
                     }
             )
         }
@@ -164,13 +160,16 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise) {
 fun ExerciseScreen(navController: NavController, model: ExerciseScreenViewModel){
     model.getBodyParts()
     model.listAllExercises()
+    model.fetchExerciseinfo()
+    println("EN SCREEN "+ model.fetchExerciseinfo())
+    var RecibirInfo: List<String>  = model.fetchExerciseinfo()
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
     ){
         SelectOpitions(model)
-        ExercisesGrid(navController, model)
+        ExercisesGrid(navController, model, RecibirInfo)
     }
 }
 

@@ -2,7 +2,6 @@ package pe.edu.ulima.pm20232.aulavirtual.screenmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,10 +17,9 @@ import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 import pe.edu.ulima.pm20232.aulavirtual.models.ExerciseMember
 import pe.edu.ulima.pm20232.aulavirtual.models.responses.BodyPartExercisesCount
-import pe.edu.ulima.pm20232.aulavirtual.models.responses.BodyParts
 import pe.edu.ulima.pm20232.aulavirtual.services.BodyPartServiceInterface
-import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseService
 import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseMemberService
+import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseService
 import pe.edu.ulima.pm20232.aulavirtual.services.MemberService
 
 class HomeScreenViewModel: ViewModel(){
@@ -35,11 +33,6 @@ class HomeScreenViewModel: ViewModel(){
     var bodyPartsCount: Int by mutableStateOf(0)
     var exercisesCount: Int by mutableStateOf(0)
     val bodyPartdp = mutableListOf<BodyPart>()
-
-    //var bodyPartdp: List<BodyPart> by mutableStateOf(listOf())
-    //val bodyPartMap = mutableMapOf<Int, String>()
-    //val bodyPartFlow = MutableStateFlow(bodyPartMap.toMap())
-
 
     private var _exercises = MutableStateFlow<List<Exercise>>(emptyList())
 
@@ -80,17 +73,7 @@ class HomeScreenViewModel: ViewModel(){
             }
         }
     }
-/*    fun getBodyParts(){
-        val bodyPartService: BodyPartService = BodyPartService()
-        var bodyPartList: ArrayList<BodyPart> = bodyPartService.bodyPartList
-        for(p: BodyPart in bodyPartList){
-            val id = p.id
-            val name = p.name
-            if(!bodyPartsMap.containsKey(id)){
-                bodyPartsMap[id] = name
-            }
-        }
-    }*/
+
 
     val exercises: StateFlow<List<Exercise>> get() = _exercises
     fun setExercises(newItems: List<Exercise>) {
@@ -154,26 +137,6 @@ class HomeScreenViewModel: ViewModel(){
         return Pair(bodyPartsCount, exercisesCount)
     }
 
-    /*fun countAssignedExercises(userId: Int): Pair<Int, Int> {
-        val exerciseMembers = ExerciseMemberService().exerciseMemberList
-        val exercises = ExerciseService().listAll()
-        //val bodyParts = BodyPartService().bodyPartList
-
-        var assignedExerciseCount = 0
-        val uniqueBodyPartIds = mutableSetOf<Int>()
-
-        for (exerciseMember in exerciseMembers) {
-            if (exerciseMember.memberId == userId) {
-                assignedExerciseCount++
-                val matchedExercise = exercises.find { it.id == exerciseMember.exerciseId }
-                val bodyPartId = matchedExercise?.bodyPartId
-                if (bodyPartId != null && uniqueBodyPartIds.add(bodyPartId)) {
-                }
-            }
-        }
-
-        return Pair(assignedExerciseCount, uniqueBodyPartIds.size)
-    }*/
     fun getExerciseMemberForUser(userId: Int, id: Int): ExerciseMember? {
         return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == id }
     }

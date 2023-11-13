@@ -409,4 +409,4 @@ class ExerciseMemberService {
         exerciseMemberList.add(ExerciseMember(id = 401, reps = 11, sets = 5, exerciseId = 50, memberId = 28))
         exerciseMemberList.add(ExerciseMember(id = 402, reps = 16, sets = 3, exerciseId = 45, memberId = 28))
     }
-}
+    }
