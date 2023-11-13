@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val blackList: List<String> = listOf("profile", "login", "create_account", "reset_password")
+                    val blackList: List<String> = listOf("profile?user_id={user_id}", "login", "create_account", "reset_password")
                     val currentRoute = navBackStackEntry?.destination?.route
                     var showDialogShare by remember { mutableStateOf(false) }
                     var showDialogAbout by remember { mutableStateOf(false) }
@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                             if(!blackList.contains(currentRoute)) {
                                 val screens: List<TopBarScreen> = listOf(
                                     TopBarScreen(
-                                        route = "profile",
+                                        route = "profile?user_id=${homeScreenViewModel.userId}",
                                         title = "Editar perfil",
                                     ),
                                     TopBarScreen(
@@ -112,8 +112,10 @@ class MainActivity : ComponentActivity() {
                                         }
                                     ),
                                     TopBarScreen(
-                                        route = "sign_out",
                                         title = "Cerrar Sesión",
+                                        onClick = {
+                                            finishAffinity()
+                                        }
                                     ),
                                 )
                                 TopNavigationBar(navController, screens)
@@ -289,10 +291,17 @@ class MainActivity : ComponentActivity() {
                                     Log.d("ROUTER", "reset password")
                                     ResetPasswordScreen(resetScreenViewModel, navController)
                                 }
-                                composable(route = "profile") {
+                                composable(route = "profile?user_id={user_id}", arguments = listOf(
+                                    navArgument("user_id") {
+                                        type = NavType.IntType
+                                        defaultValue = 0
+                                    }
+                                ), content = { entry ->
+                                    val userId = entry.arguments?.getInt("user_id")!!
+                                    //homeScreenViewModel.userId = userId;
                                     Log.d("ROUTER", "profile")
-                                    ProfileScreen(navController, loginScreenViewModel, profileScreenViewModel, 0)
-                                }
+                                    ProfileScreen(navController, loginScreenViewModel, profileScreenViewModel, userId)
+                                })
                                 composable(route = "routine?user_id={user_id}&member_id={member_id}", arguments = listOf(
                                     navArgument("user_id") {
                                         type = NavType.IntType

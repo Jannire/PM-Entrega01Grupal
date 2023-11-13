@@ -4,6 +4,7 @@ import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 import pe.edu.ulima.pm20232.aulavirtual.models.responses.BodyPartExercisesCount
 import pe.edu.ulima.pm20232.aulavirtual.models.responses.ExerciseSetReps
+import pe.edu.ulima.pm20232.aulavirtual.models.responses.Profile
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.GET
@@ -31,5 +32,10 @@ interface MemberService {
         @Query("member_id") memberId: Int? = null,
         @Query("exercise_id") exerciseId: Int? = null,
     ): Call<ExerciseSetReps>
+
+    @GET("member/profile") // Reemplaza con la URL de tu punto final
+    fun profile(
+        @Query("user_id") userId: Int? = null,
+    ): Call<Profile>
 
 }
