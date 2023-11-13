@@ -27,9 +27,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pe.edu.ulima.pm20232.aulavirtual.R
 import pe.edu.ulima.pm20232.aulavirtual.configs.BackendClient
 import pe.edu.ulima.pm20232.aulavirtual.screens.ImageView
@@ -58,19 +60,21 @@ class ProfileScreenViewModel: ViewModel() {
     fun load(user: Int){
         coroutine.launch {
             try {
-                val response = memberService.profile(user)?.execute()
-                if (response != null) {
-                    lname = response.body()!!.last_names
-                    name = response.body()!!.names
-                    phone = response.body()!!.phone
-                    email = response.body()!!.email
-                    level = response.body()!!.level_name
-                    //img = response.body()!!.imageUrl
+                withContext(Dispatchers.IO) {
+                    val response = memberService.profile(user)?.execute()
+                    if (response != null) {
+                        lname = response.body()!!.last_names
+                        name = response.body()!!.names
+                        phone = response.body()!!.phone
+                        email = response.body()!!.email
+                        level = response.body()!!.level_name
+                        //img = response.body()!!.imageUrl
 
-                    println("RESPUESTA : " + response.body())
+                        println("RESPUESTA : " + response.body())
 
-                } else {
-                    // Maneja errores
+                    } else {
+                        // Maneja errores
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
