@@ -1,14 +1,12 @@
 package pe.edu.ulima.pm20232.aulavirtual.screenmodels
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
 import pe.edu.ulima.pm20232.aulavirtual.models.Exercise
 import pe.edu.ulima.pm20232.aulavirtual.services.BodyPartService
+import pe.edu.ulima.pm20232.aulavirtual.services.BodyPartServiceInterface
 import pe.edu.ulima.pm20232.aulavirtual.services.ExerciseService
 
 class ExerciseScreenViewModel: ViewModel(){

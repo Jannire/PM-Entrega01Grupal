@@ -38,7 +38,7 @@ fun TextFieldWithLeadingIcon(
             modifier = Modifier
                 .fillMaxWidth()
                 //.border(1.dp, borderColor)
-                .padding(5.dp)
+                .padding(4.dp)
                 .background(color = Color.Transparent)
             ,
             value = text,
@@ -46,7 +46,7 @@ fun TextFieldWithLeadingIcon(
                 onTextChanged(it)
             },
             placeholder = {
-                Text(text = placeholder, fontSize = 14.sp)
+                Text(text = placeholder, fontSize = 12.sp)
             },
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
@@ -72,7 +72,7 @@ fun TextFieldWithLeadingIcon(
             modifier = Modifier
                 .fillMaxWidth()
                 //.border(1.dp, borderColor)
-                .padding(5.dp)
+                .padding(4.dp)
                 .background(color = Color.Transparent)
             ,
             value = text,
@@ -80,11 +80,11 @@ fun TextFieldWithLeadingIcon(
                 onTextChanged(it)
             },
             placeholder = {
-                Text(text = placeholder, fontSize = 16.sp)
+                Text(text = placeholder, fontSize = 12.sp)
             },
             singleLine = true,
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.White,
+                backgroundColor = (if (isSystemInDarkTheme()) Color.DarkGray else White400),
                 focusedIndicatorColor = Color.LightGray,
                 unfocusedIndicatorColor = Orange800
             ),

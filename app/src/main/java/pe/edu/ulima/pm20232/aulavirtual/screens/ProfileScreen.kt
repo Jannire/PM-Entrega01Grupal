@@ -24,12 +24,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import pe.edu.ulima.pm20232.aulavirtual.R
+import pe.edu.ulima.pm20232.aulavirtual.configs.BackendClient
 import pe.edu.ulima.pm20232.aulavirtual.models.Member
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.LoginScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.screenmodels.ProfileScreenViewModel
 import pe.edu.ulima.pm20232.aulavirtual.services.MemberService
+import pe.edu.ulima.pm20232.aulavirtual.services.MemberServiceAntiguoELIMINAR
 import pe.edu.ulima.pm20232.aulavirtual.services.UserService
+import pe.edu.ulima.pm20232.aulavirtual.services.UserService2
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange400
 import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Orange800
@@ -82,16 +88,7 @@ fun TopBar(screenHeightDp: Int, screenWidthDp: Int, navController: NavController
 }
 
 @Composable
-fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: Int) {
-
-    val memberService: MemberService = MemberService()
-
-    val lname = toString(memberService.getMemberLastNames(user))
-    val name = toString(memberService.getMemberNames(user))
-    val dni = toString(memberService.getMemberDni(user))
-    val level = toString(memberService.getMemberLevelId(user))
-    val img = toString(memberService.getMemberImageUrl(user))
-
+fun UserCard(screenHeightDp: Int, screenWidthDp: Int, model: ProfileScreenViewModel) {
 
     Row(
         modifier = Modifier
@@ -101,14 +98,14 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
             .padding(start = (screenWidthDp * 0.1).dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ImageView(url = img, width = 100, height = 100) // No adaptability
+        ImageView(url = model.img, width = 100, height = 100) // No adaptability
         Column(
             modifier = Modifier
                 .padding(start = (screenWidthDp * 0.08).dp),
         ) {
-            if (name != null) {
+            if (model.name != null) {
                 Text(
-                    text = name+" "+lname,
+                    text = model.name+" "+model.lname,
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
@@ -128,7 +125,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
                     colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.Black),
                 )
                 Text(
-                    text = dni,
+                    text = model.email,
                     style = TextStyle(
                         fontFamily = FontFamily.Default,
                         fontWeight = FontWeight.Normal,
@@ -138,7 +135,7 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
                 )
             }
             Text(
-                text = level,
+                text = model.level,
                 style = TextStyle(
                     fontFamily = FontFamily.Default,
                     fontWeight = FontWeight.Normal,
@@ -148,17 +145,13 @@ fun UserCard(screenHeightDp: Int, screenWidthDp: Int, imageUrl: String, user: In
             )
         }
     }
+
 }
 @Composable
-fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, user: Int) {
+fun ContactInfo(screenHeightDp: Int, screenWidthDp: Int, model: ProfileScreenViewModel) {
 
-    val memberService: MemberService = MemberService()
-
-    val telefono = memberService.getMemberPhoneByCode(user)
-    var email = memberService.getMemberEmailByCode(user)
-
-
-
+    val telefono = model.phone
+    var email = model.email
 
     Column(
         modifier = Modifier
@@ -273,10 +266,9 @@ fun BtnLogOut(screenHeightDp: Int, screenWidthDp: Int, navController: NavControl
 fun FinalScreen(
     screenHeightDp: Int,
     screenWidthDp: Int,
-    imageUrl: String,
     loginModel: LoginScreenViewModel,
     navController: NavController,
-    userId: Int) {
+    viewModel: ProfileScreenViewModel) {
 
     val user = loginModel.user
 
@@ -286,8 +278,8 @@ fun FinalScreen(
             .background(if (isSystemInDarkTheme()) Color.Black else Color.White) // Background color, changes in dark mode
     ) {
         TopBar(screenHeightDp, screenWidthDp, navController)
-        UserCard(screenHeightDp, screenWidthDp, imageUrl, userId)
-        ContactInfo(screenHeightDp, screenWidthDp, userId)
+        UserCard(screenHeightDp, screenWidthDp, viewModel)
+        ContactInfo(screenHeightDp, screenWidthDp, viewModel)
         BtnData(screenHeightDp, screenWidthDp)
         BtnLogOut(screenHeightDp, screenWidthDp, navController)
     }
@@ -298,22 +290,6 @@ fun ProfileScreen(navController: NavController, loginModel: LoginScreenViewModel
     val configuration = LocalConfiguration.current
     val screenWidthDp = configuration.screenWidthDp
     val screenHeightDp = configuration.screenHeightDp
-    val imageUrl =
-        "https://wallpapers.com/images/hd/cute-cat-eyes-profile-picture-uq3edzmg1guze2hh.jpg" // Replace with your image URL
-    val userId = 24
-
-    FinalScreen(screenHeightDp, screenWidthDp, imageUrl, loginModel, navController, userId)
-
-
-
-
-
-
-
-
-
-
-
-
-
+    viewModel.load(userId)
+    FinalScreen(screenHeightDp, screenWidthDp, loginModel, navController, viewModel)
 }

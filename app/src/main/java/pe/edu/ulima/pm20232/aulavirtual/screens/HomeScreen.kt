@@ -58,6 +58,9 @@ import pe.edu.ulima.pm20232.aulavirtual.services.UserService
 import java.net.URL
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import pe.edu.ulima.pm20232.aulavirtual.models.BodyPart
+import pe.edu.ulima.pm20232.aulavirtual.ui.theme.Gray800
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -99,9 +102,6 @@ fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, user
         ShowDialog(showDialog, currentExercise, exerciseMember)
     }
 }
-
-
-
 
 @Composable
 fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise, exerciseMember: ExerciseMember) {
@@ -212,44 +212,12 @@ fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise, exerciseMe
     }
 }
 
-
-
-@Composable
-fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel, userId: Int) {
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp
-    val screenHeightDp = configuration.screenHeightDp
-
-    val (assignedExerciseCount, trainedBodyPartsCount) = remember {
-        model.countAssignedExercises(userId)
-    }
-
-    model.getBodyParts()
-
-    if (userId != null) {
-        model.listAssignedExercises(userId)
-    } else {
-        model.listAllExercises()
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-    ) {
-        Activities(assignedExerciseCount, trainedBodyPartsCount, screenWidthDp, screenHeightDp)
-        SelectOptions(model,userId)
-        ExercisesGrid(navController, model, userId)
-    }
-}
-
-
 @Composable
 fun SelectOptions(model: HomeScreenViewModel, userId: Int) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
-
+    //println("BODY PARTS DP:  $dpBodyParts")
     val icon = if (expanded)
         Icons.Filled.KeyboardArrowUp
     else
@@ -289,20 +257,19 @@ fun SelectOptions(model: HomeScreenViewModel, userId: Int) {
             expanded = false
             model.listAssignedExercises(userId) // Unfilter the grid
         }) {
-            Text("Quitar Filtro", color = Color.Black)
+
         }
-        for ((key, value) in model.bodyPartsMap) {
+        for (part in model.bodyPartdp) {
             DropdownMenuItem(onClick = {
-                selectedText = value
+                selectedText = part.name
                 expanded = false
-                model.filterByBodyParts(userId, key) // Call the filterByBodyParts function here
+                model.filterByBodyParts(userId, part.id) // Call the filterByBodyParts function here
             }) {
-                Text(text = value, color = Color.Black)
+                Text(text = part.name, color = (if (isSystemInDarkTheme()) White400 else Gray800))
             }
         }
     }
 }
-
 
 @Composable
 fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWidthDp: Int, screenHeightDp: Int) {
@@ -369,27 +336,39 @@ fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWid
         }
     }
 }
+
+
 @Composable
-fun ExerciseDetailsScreen(exerciseMember: ExerciseMember) {
-    Box(
+fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, model: HomeScreenViewModel, userId: Int) {
+    val configuration = LocalConfiguration.current
+    val screenWidthDp = configuration.screenWidthDp
+    val screenHeightDp = configuration.screenHeightDp
+
+    var assignedExerciseCount = 0 //mutableStateOf(0);
+    var trainedBodyPartsCount = 0 //mutableStateOf(0);
+    var temp = model.fetchBodyPartsExercises()
+
+    assignedExerciseCount = temp.second
+    trainedBodyPartsCount = temp.first
+
+    //var dpBodyParts: List<BodyPart> = model.fetchBodyParts();
+    //println("DP!!!" + model.fetchBodyParts())
+    model.fetchBodyParts()
+    //model.getBodyParts()
+
+    if (userId != null) {
+        model.listAssignedExercises(userId)
+    } else {
+        model.listAllExercises()
+    }
+
+    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp)
+            .fillMaxWidth()
+            .padding(20.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Text(text = "Repetitions: ${exerciseMember.reps}")
-            Text(text = "Sets: ${exerciseMember.sets}")
- //           Text(text = "Description: ${exerciseMember.exercise.description}")
-
-
-
-
-        }
+        Activities(assignedExerciseCount, trainedBodyPartsCount, screenWidthDp, screenHeightDp)
+        SelectOptions(model,userId)
+        ExercisesGrid(navController, model, userId)
     }
 }
-
-
