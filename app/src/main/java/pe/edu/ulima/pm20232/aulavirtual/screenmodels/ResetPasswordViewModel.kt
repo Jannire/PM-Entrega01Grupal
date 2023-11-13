@@ -31,9 +31,9 @@ class ResetPasswordViewModel(): ViewModel() {
                 withContext(Dispatchers.IO) {
                     val response = userService.resetPass(dni, correo)?.execute()
                     if (response != null) {
-                        if (response.body()!!.success == true) {
+                        if (response.body()!!.success) {
                             val responseData = response.body()!!
-                            message = response.body()!!.message
+                            message = responseData.message
                         } else {
                             // Maneja errores
                             message = response.body()!!.message

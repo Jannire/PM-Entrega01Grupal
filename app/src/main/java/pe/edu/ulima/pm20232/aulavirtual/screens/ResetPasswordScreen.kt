@@ -24,6 +24,7 @@ import androidx.compose.material.BottomSheetState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
@@ -228,7 +229,7 @@ fun BottomSheet(screenWidthDp: Int, screenHeightDp: Int, viewModel: ResetPasswor
    val coroutineScope = rememberCoroutineScope()
    BottomSheetScaffold(
       scaffoldState = bottomSheetScaffoldState,
-      sheetContent = {},
+      sheetContent = {Text("")},
       sheetPeekHeight = 0.dp,
       backgroundColor = Color.Transparent
    ) {
@@ -244,6 +245,7 @@ fun Reset(){
          .padding(20.dp),
       contentAlignment = Alignment.BottomCenter
    ){
+
    }
 }
 

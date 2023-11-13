@@ -254,7 +254,7 @@ fun BSheet(screenWidthDp: Int, screenHeightDp: Int, viewModel: CreateAccountView
     val coroutineScope = rememberCoroutineScope()
     BottomSheetScaffold(
         scaffoldState = bottomSheetScaffoldState,
-        sheetContent = {},
+        sheetContent = {Text("")},
         sheetPeekHeight = 0.dp,
         backgroundColor = Color.Transparent
     ) {
