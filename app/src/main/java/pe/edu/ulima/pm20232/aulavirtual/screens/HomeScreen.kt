@@ -100,6 +100,9 @@ fun ExercisesGrid(navController: NavController, model: HomeScreenViewModel, user
     }
 }
 
+
+
+
 @Composable
 fun ShowDialog(showDialog: MutableState<Boolean>, exercise: Exercise, exerciseMember: ExerciseMember) {
     if (showDialog.value) {
@@ -366,3 +369,27 @@ fun Activities(assignedExerciseCount: Int, trainedBodyPartsCount: Int, screenWid
         }
     }
 }
+@Composable
+fun ExerciseDetailsScreen(exerciseMember: ExerciseMember) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(text = "Repetitions: ${exerciseMember.reps}")
+            Text(text = "Sets: ${exerciseMember.sets}")
+ //           Text(text = "Description: ${exerciseMember.exercise.description}")
+
+
+
+
+        }
+    }
+}
+
+

@@ -57,7 +57,6 @@ class HomeScreenViewModel: ViewModel(){
     fun filterByBodyParts(userId: Int, bodyPartId: Int) {
         val exerciseMembers = ExerciseMemberService().exerciseMemberList
         val service: ExerciseService = ExerciseService()
-
         val assignedExercises = exerciseMembers
             .filter { it.memberId == userId }
             .map { it.exerciseId }
@@ -99,6 +98,17 @@ class HomeScreenViewModel: ViewModel(){
 
     fun getExerciseMemberForUser(userId: Int, id: Int): ExerciseMember? {
         return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == id }
+    }
+
+
+    //función para obtener detalles del ejercicio asignado a un miembro
+    fun getAssignedExerciseDetails(userId: Int, exerciseId: Int): ExerciseMember? {
+        return ExerciseMemberService().exerciseMemberList.find { it.memberId == userId && it.exerciseId == exerciseId }
+    }
+
+    // función para obtener todos los ejercicios asignados a un miembro
+    fun listAssignedExercisesDetails(userId: Int): List<ExerciseMember> {
+        return ExerciseMemberService().exerciseMemberList.filter { it.memberId == userId }
     }
 
 
