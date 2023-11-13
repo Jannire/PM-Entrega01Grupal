@@ -222,8 +222,8 @@ fun HomeScreen(navController: NavController, loginModel: LoginScreenViewModel, m
     var trainedBodyPartsCount = 0 //mutableStateOf(0);
     var temp = model.fetchBodyPartsExercises()
 
-    assignedExerciseCount = temp.first
-    trainedBodyPartsCount = temp.second
+    assignedExerciseCount = temp.second
+    trainedBodyPartsCount = temp.first
 
     model.getBodyParts()
 
